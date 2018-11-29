@@ -1,0 +1,58 @@
+\documentclass{jarticle}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{here}
+\usepackage{listings}
+
+\begin{document}
+
+\title{課題1}
+\author{1029289895 尾崎翔太}
+\date{2018/}
+
+\maketitle
+\newpage
+
+\section{アプリケーションの説明}
+ビデオレンタルシステムである. 一般ユーザはあるビデオはどの店にあるか, ある店にはどんなビデオがあるかなどを検索できる. 店側は一般ユーザがどのビデオを借りているか, 及びその返却期限を確認できる.
+\section{利用者の役割}
+\begin{description}
+\item[一般ユーザ] \\ \leavevmode
+このビデオレンタルショップを利用している消費者.
+\item[店員] \\ \leavevmode
+このビデオレンタルショップが有している店の従業員.
+\item[管理者] \\ \leavevmode
+このシステムの更新を行う人.
+\end{description}
+\section{役割ごとの機能}
+\subsection{一般ユーザの機能}
+\begin{description}
+\item[ビデオ検索機能] \\ \leavevmode
+ビデオの名前や店の名前やジャンルで検索して, ヒットしたビデオのリストを得ることができる. また, その結果を発売年や長さでソートできる.
+\item[店検索機能]
+ある特定のビデオについて, それが置いてある店を得ることができる.
+\item[利用状況確認機能] \\ \leavevmode
+自分がどのビデオを借りているか, 及びその返却期限を得ることができる.
+\item[履歴確認機能] \\ \leavevmode
+自分の今までの利用履歴を確認できる.
+\end{description}
+\subsection{店員の機能}
+\begin{description}
+\item[利用状況確認機能] \\ \leavevmode
+自分が勤めている店について, どのビデオが誰に借りられていて, その返却期限はいつかを得ることができる.
+\item[催促機能] \\ \leavevmode
+返却期限を過ぎている一般ユーザに返却を促すメールを送ることができる.
+\end{description}
+\subsection{管理者}
+\begin{description}
+\item[ビデオ管理機能] \\ \leavevmode
+新しいビデオを置いたり, 今まで置いてあったビデオを置かなくなったりしたときに追加/削除ができる.
+\item[ユーザ管理機能] \\ \leavevmode
+新しいユーザを登録できる.
+\item[店管理機能] \\ \leavevmode
+開店した店を追加したり, 閉店した店を削除したりできる.
+\item[店員管理機能] \\ \leavevmode
+新しい店員を登録したり, 辞めた店員を削除したりできる.
+\end{description}
+\section{実体関連図}
+
+\end{document}
