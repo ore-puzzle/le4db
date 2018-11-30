@@ -1,0 +1,76 @@
+\documentclass{jarticle}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{here}
+\usepackage{listings}
+
+\begin{document}
+
+\title{課題2}
+\author{1029289895 尾崎翔太}
+\date{2018/}
+
+\maketitle
+\newpage
+
+\section{関係スキーマ}
+各関係スキーマは以下の通りである. 
+\begin{itemize}
+\item ユーザ(\underline{メールアドレス}, ユーザ名, ユーザ住所)
+\item 期限(\underline{貸出日}, 貸出期間, 返却日, \underline{メールアドレス}, \underline{題名}, \underline{発売年})
+\item ビデオ(\underline{題名}, \underline{発売年}, 長さ, 出版社, ジャンル)
+\item 店(\underline{店名}, \underline{店住所}, 店長)
+\item 店員(\underline{id}, 店員名)
+\item 借りている(\underline{メールアドレス}, \underline{題名}, \underline{発売年}, \underline{貸出日}, 料金)
+\item 置いてある(\underline{題名}, \underline{発売年}, \underline{店名}, \underline{店住所}, 最大数, 数)
+\item 働いている(\underline{id}, \underline{店名}, \underline{店住所}, 勤務開始年)
+\end{itemize}
+属性名は適宜変更した. また, 課題1のER図では同じ人が2回以上同じビデオを借りられないことに気付いたので, 関連「借りている」を三項関連にして, 新たな実体として「期限」を追加した. そして, 「期限」は属性として貸出日, 貸出期間, 返却日, メールアドレス, 題名, 発売年を保持して, キーを貸出日, メールアドレス, 題名, とし, 「借りている」は属性として料金を保持する. これでも, 同じビデオを同じ日に複数借りることができないが, それはできないということにする. 他に, 「働いている」に属性「勤務開始年」を追加した. ただし, 一度辞めて再び同じ店で働き出した場合には, 新しい方の情報を保持することとする.
+\section{関数従属性/多値従属性}
+\subsection{ユーザ}
+\begin{description}
+\item[\{メールアドレス\} $\rightarrow$ \{ユーザ名, ユーザ住所\}] \leavevmode \\
+キー制約から自然に導かれる関数従属性である.
+\end{description}
+\subsection{期限}
+\begin{description}
+\item[\{貸出日, メールアドレス, 題名, 発売年\} $\rightarrow$ \{貸出期間, 返却日\}] \leavevmode \\
+キー制約から自然に導かれる関数従属性である.
+\item[\{貸出日, 貸出期間} $\rightarrow$ \{返却日\}] \leavevmode \\
+返却日 $=$ 貸出日 $+$ 貸出期間 から導かれる関数従属性である.
+\item[\{貸出日, 返却日\} $\rightarrow$ \{貸出期間\}] \leavevmode \\
+上に同じ.
+\item[\{貸出期間, 返却日\} $\rightarrow$ \{貸出日\}] \leavevmode \\
+上に同じ.
+\end{description}
+\subsection{ビデオ}
+\begin{description}
+\item[\{題名, 発売年\} $\rightarrow$ \{長さ, 出版社, ジャンル\}] \leavevmode \\
+キー制約から自然に導かれる関数従属性である.
+\end{description}
+\subsection{店}
+\begin{description}
+\item[\{店名, 店住所\} $\rightarrow$ \{店長\}] \leavevmode \\
+キー制約から自然に導かれる関数従属性である.
+\end{description}
+\subsection{店員}
+\begin{description}
+\item[\{id\} $\rightarrow$ \{店員名\}] \leavevmode \\
+キー制約から自然に導かれる関数従属性である.
+\end{description}
+\subsection{借りている}
+\begin{description}
+\item[\{メールアドレス, 題名, 発売年, 貸出日\} $\rightarrow$ \{料金\}] \leavevmode \\
+キー制約から自然に導かれる関数従属性である.
+\end{description}
+\subsection{置いてある}
+\begin{description}
+\item[\{題名, 発売年, 店名, 店住所\} $\rightarrow$ \{最大数, 数\}] \leavevmode \\
+キー制約から自然に導かれる関数従属性である.
+\end{description}
+\subsection{働いている}
+\begin{description}
+\item[\{id, 店名, 店住所\} $\rightarrow$ \{勤務開始年\}] \leavevmode \\
+キー制約から自然に導かれる関数従属性である.
+\end{description}
+\end{document}
+
