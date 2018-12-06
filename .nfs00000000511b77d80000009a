@@ -20,7 +20,7 @@
 \item 内容(\underline{題名}, \underline{発売年}, 長さ, 出版社, ジャンル)
 \item 店(\underline{店名}, \underline{店住所}, 総所持数)
 \item 店員(\underline{eid}, 店員名)
-\item 借りている(\underline{メールアドレス}, \underline{mid}, 料金, 貸出日, 貸出期間, 返却日)
+\item 借りている(\underline{メールアドレス},　\underline{mid}, 料金, 貸出日, 貸出期間, 返却日)
 \item 置いてある(\underline{mid}, \underline{店名}, \underline{店住所}, 最大数, 数)
 \item 働いている(\underline{eid}, \underline{店名}, \underline{店住所})
 \item 保存されている(\underline{mid}, \underline{題名}, \underline{発売年})
@@ -56,9 +56,9 @@
 \begin{description}
 \item[\{メールアドレス, mid\} $\rightarrow$ \{料金, 貸出日, 貸出期間, 返却日\}] \leavevmode \\
 キー制約から自然に導かれる関数従属性である.
-\item[\{貸出日, 貸出期間\} $\rightarrow$ \{返却日\}]
+\item{\{貸出日, 貸出期間\} $\rightarrow$ \{返却日\}]
 \item[\{貸出日, 返却日\} $\rightarrow$ \{貸出期間\}]
-\item[\{貸出期間, 返却日\} $\rightarrow$ \{貸出日\}] \leavevmode \\
+\item[\{貸出期間, 返却日\} $\rightarrow$ \{貸出日\}]
 貸出日 $+$ 貸出期間 $=$ 返却日 の関係から, 二つがわかれば残りの一つがわかる. 
 \end{description}
 \subsection{置いてある}

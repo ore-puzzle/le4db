@@ -16,6 +16,26 @@
 \section{新しいスキーマ}
 再設計されたスキーマは以下のようになった
 \begin{itemize}
+\item ユーザ(\underline{メールアドレス}, ユーザ名, ユーザ住所)
+\item メディア(\underline{mid}, 種類)
+\item 内容(\underline{題名}, \underline{発売年}, 長さ, 出版社, ジャンル)
+\item 店(\underline{店名}, \underline{店住所}, 総所持数)
+\item 店員(\underline{eid}, 店員名)
+\item 借りている(\underline{メールアドレス}, \underline{mid}, 料金, 貸出日, 返却日)
+\item 期間(\underline{貸出日}, \underline{貸出期間}, 返却日)
+\item 置いてある(\underline{mid}, \underline{店名}, \underline{店住所}, 最大数, 数)
+\item 働いている(\underline{eid}, \underline{店名}, \underline{店住所})
+\item 保存されている(\underline{mid}, \underline{題名}, \underline{発売年})
 \end{itemize}
-
+これはBoyce-Codd正規形である. 元のスキーマにおいて, 「借りている」以外は, 自明でない関数従属性が存在しない, あるいは\{キー\} $\rightarrow$ \{属性\}　という形の関数従属性しか存在しないので, 特に変化していない. 借りているについては, \{貸出日, 返却日\} $\rightarrow$ \{貸出期間\} という関数従属性を用いて「借りている」と「期間」に分解した. その結果, 「借りている」の保持している自明でない関数従属性は,
+\begin{itemize}
+\item \{メールアドレス, mid\} $\rightarrow$ \{料金, 貸出日, 返却日\}
+\end{itemize}
+となり, 「期間」の保持している自明でない関数従属性は,
+\begin{itemize}
+\item \{貸出日, 貸出期間\} $\rightarrow$ \{返却日\}
+\item \{貸出日, 返却日\} $\rightarrow$ \{貸出期間\}
+\itme \{貸出期間, 返却日\} $\rightarrow$ \{貸出日\}
+\end{itemize}
+となった. \{メールアドレス, mid\} $\rightarrow$ \{貸出期間\} という関数従属性が失われてしまったが, 合成法でやると, 今「期間」が保持している関数従属性らのせいで冗長な感じのスキーマになるので, それよりましだと思った.
 \end{document}

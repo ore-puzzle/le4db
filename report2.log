@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.14159265-p3.6-141210-2.6 (utf8.euc) (TeX Live 2015/Debian) (preloaded format=platex 2018.1.10)  30 NOV 2018 11:31
+This is e-pTeX, Version 3.14159265-p3.6-141210-2.6 (utf8.euc) (TeX Live 2015/Debian) (preloaded format=platex 2018.1.10)  6 DEC 2018 13:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -138,15 +138,15 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 18.
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <12> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 29.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 30.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <12> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 29.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 30.
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <10> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 31.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 32.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <10> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 31.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 32.
 LaTeX Font Info:    Font shape `OMS/cmr/bx/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 31.
+(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 32.
  [2] [3]
 (./report2.aux) ) 
 Here is how much of TeX's memory you used:
@@ -156,6 +156,6 @@ Here is how much of TeX's memory you used:
  5531 multiletter control sequences out of 15000+600000
  13958 words of font info for 54 fonts, out of 8000000 for 9000
  264 hyphenation exceptions out of 8191
- 27i,6n,32p,593b,228s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 27i,6n,32p,236b,228s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on report2.dvi (3 pages, 5588 bytes).
+Output written on report2.dvi (3 pages, 4268 bytes).
