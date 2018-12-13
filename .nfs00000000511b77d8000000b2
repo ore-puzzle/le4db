@@ -7,7 +7,7 @@
 
 \title{課題2}
 \author{1029289895 尾崎翔太}
-\date{2018/}
+\date{2018/12/13}
 
 \maketitle
 \newpage
@@ -20,12 +20,13 @@
 \item 内容(\underline{題名}, \underline{発売年}, 長さ, 出版社, ジャンル)
 \item 店(\underline{店名}, \underline{店住所}, 総所持数)
 \item 店員(\underline{eid}, 店員名)
-\item 借りている(\underline{メールアドレス},　\underline{mid}, 料金, 貸出日, 貸出期間, 返却日)
+\item 付属情報(\underline{通勤手段}, \underline{店の良い所})
+\item 借りている(\underline{メールアドレス}, \underline{mid}, 料金, 貸出日, 貸出期間, 返却日)
 \item 置いてある(\underline{mid}, \underline{店名}, \underline{店住所}, 最大数, 数)
-\item 働いている(\underline{eid}, \underline{店名}, \underline{店住所})
+\item 働いている(\underline{eid}, \underline{店名}, \underline{店住所}, \underline{通勤手段}, \underline{店の良い所})
 \item 保存されている(\underline{mid}, \underline{題名}, \underline{発売年})
 \end{itemize}
-属性名は適宜変更した.
+属性名は適宜変更した.　また, 新たな実体「付属情報」を追加し, 関連「働いている」を「店員」, 「店」, 「付属情報」の三項関連にした. これは, 自明でない多値従属性で関数従属性でないものを作るためのもので, このシステムにおいて活用する予定はない.
 \section{関数従属性/多値従属性}
 \subsection{ユーザ}
 \begin{description}
@@ -52,13 +53,17 @@
 \item[\{eid\} $\rightarrow$ \{店員名\}] \leavevmode \\
 キー制約から自然に導かれる関数従属性である.
 \end{description}
+\subsection{付属情報}
+\begin{description}
+自明でない関数従属性, 多値従属性は存在しない.
+\end{description}
 \subsection{借りている}
 \begin{description}
 \item[\{メールアドレス, mid\} $\rightarrow$ \{料金, 貸出日, 貸出期間, 返却日\}] \leavevmode \\
 キー制約から自然に導かれる関数従属性である.
-\item{\{貸出日, 貸出期間\} $\rightarrow$ \{返却日\}]
+\item[\{貸出日, 貸出期間\} $\rightarrow$ \{返却日\}]
 \item[\{貸出日, 返却日\} $\rightarrow$ \{貸出期間\}]
-\item[\{貸出期間, 返却日\} $\rightarrow$ \{貸出日\}]
+\item[\{貸出期間, 返却日\} $\rightarrow$ \{貸出日\}] \leavevmode \\
 貸出日 $+$ 貸出期間 $=$ 返却日 の関係から, 二つがわかれば残りの一つがわかる. 
 \end{description}
 \subsection{置いてある}
@@ -67,7 +72,12 @@
 キー制約から自然に導かれる関数従属性である.
 \end{description}
 \subsection{働いている}
-自明でない関数従属性, 多値従属性は存在しない.
+\begin{description}
+\item[\{eid, 店名, 店住所\} $\rightarrow$ \{通勤手段, 店の良い所\}] \leavevmode \\
+キー制約から自然に導かれる関数従属性である.
+\item[\{eid, 店名, 店住所\} $\rightarrow\rightarrow$ \{通勤手段\}] \leavevmode \\
+\item[\{eid, 店名, 店住所\} $\rightarrow\rightarrow$ \{店の良い所\}] \leavevmode \\
+通勤手段は天気等によって複数存在し得るし, その店員が考える店の良い所も複数存在し得るが, どれもその店で働いているその店員の情報であるから, すべての組み合わせを保持する必要があるので, 多値従属性が存在する.
 \subsection{保存されている}
 自明でない関数従属性, 多値従属性は存在しない.
 \end{document}

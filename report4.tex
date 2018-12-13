@@ -1,0 +1,25 @@
+\documentclass{jarticle}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{here}
+\usepackage{listings}
+
+\begin{document}
+
+\title{課題3}
+\author{1029289895 尾崎翔太}
+\date{2018/12/}
+
+\maketitle
+\newpage
+
+
+\section{表についての考察}
+関数従属性はキーに依存していないので, キーの指定には影響されない. 正規形も, 定義に現れるのは主キーではなく, 候補キーや超キーなので, キーの指定には影響されない. 分解法については, 注目する関数従属性の右辺に出てくる属性と出てこない属性が両辺に出てくる関数従属性は保存されない. また, 結果としてはBoyce-codd正規形になる. 合成法については, ある意味すべての関数従属性に注目しているので, すべての関数従属性が保存される. また, 結果としては第三正規形になる.
+
+\section{関係表の定義}
+CREATE TABLE user (mail TEXT, username TEXT, useraddress TEXT, PRIMARY KEY (mail));
+CREATE TABLE media (mid INTEGER, type TEXT, PRIMARY KEY (mid));
+\section{データの構築}
+
+
+\end{document}

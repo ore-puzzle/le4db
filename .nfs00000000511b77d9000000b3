@@ -71,10 +71,11 @@
 \end{description}
 \subsection{働いている}
 \begin{description}
+\item[\{eid, 店名, 店住所\} $\rightarrow$ \{通勤手段, 店の良い所\}] \leavevmode \\
+キー制約から自然に導かれる関数従属性である.
 \item[\{eid, 店名, 店住所\} $\rightarrow\rightarrow$ \{通勤手段\}] \leavevmode \\
 \item[\{eid, 店名, 店住所\} $\rightarrow\rightarrow$ \{店の良い所\}] \leavevmode \\
 通勤手段は天気等によって複数存在し得るし, その店員が考える店の良い所も複数存在し得るが, どれもその店で働いているその店員の情報であるから, すべての組み合わせを保持する必要があるので, 多値従属性が存在する.
-\end{description}
 \subsection{保存されている}
 自明でない関数従属性, 多値従属性は存在しない.
 \end{document}
