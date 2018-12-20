@@ -12,93 +12,151 @@
 \maketitle
 \newpage
 
+\section{変更点}
+関連「置いている」の属性「最大数」と「数」は実体「ビデオ」を分割したことでおかしなことになっていることに気付いたので, この二つの属性は削除し, 今置いてあるかどうかを表す属性「貸出可能」を追加した. また, 関連「借りている」に新たな属性「返却済み」を追加した.
 
 \section{表についての考察}
 関数従属性はキーに依存していないので, キーの指定には影響されない. 正規形も, 定義に現れるのは主キーではなく, 候補キーや超キーなので, キーの指定には影響されない. 分解法については, 注目する関数従属性の右辺に出てくる属性と出てこない属性が両辺に出てくる関数従属性は保存されない. また, 結果としてはBoyce-codd正規形になる. 合成法については, ある意味すべての関数従属性に注目しているので, すべての関数従属性が保存される. また, 結果としては第三正規形になる.
 
 \section{関係表の定義}
-\begin{itemize}
-\item CREATE TABLE user (mail TEXT, username TEXT, useraddress TEXT, PRIMARY KEY (mail));
-\item CREATE TABLE media (mid INTEGER, type TEXT, PRIMARY KEY (mid), CHECK (mid > 0 and (type = 'VHS' or type = 'DVD' or type = 'Blu-ray')));
-\item CREATE TABLE content (title TEXT, published\_year INTEGER, length BLOB, publisher TEXT, genre TEXT, PRIMARY KEY (title, published\_year), CHECK (published\_year > 0 and (genre = 'movie' or genre = 'drama' or genre = 'variety' or genre = 'anime' or genre = 'sport' or genre = 'documentary')));
-\item CREATE TABLE shop (shopname TEXT, shopaddress TEXT, total\_media INTEGER, PRIMARY KEY (shopname, shopaddress), CHECK (total\_media > 0));
-\item CREATE TABLE clerk (eid INTEGER, clerkname TEXT, PRIMARY KEY (eid), CHECK (eid > 0));
-\item CREATE TABLE attached\_info (commute\_method TEXT, good\_point\_of\_shop TEXT, PRIMARY KEY (commute\_method, good\_point\_of\_shop), CHECK (commute\_method = 'walk' or commute\_method = 'bicycle' or commute\_method = 'bus' or commute\_method = 'train' or commute\_method = 'car'));
-\item CREATE TABLE rent (mail TEXT, mid INTEGER, rental\_fee INTEGER, rental\_date BLOB, return\_date BLOB, PRIMARY KEY (mail, mid), CHECK (mid > 0 and rental\_fee > 0));
-\item CREATE TABLE duration (rental\_date BLOB, rental\_duration BLOB, return\_date BLOB, PRIMARY KEY (rental\_date, rental\_duration));
-\item CREATE TABLE put (mid INTEGER, shopname TEXT, shopaddress TEXT, max\_number INTEGER, now\_number INTEGER, PRIMARY KEY (mid, shopname, shopaddress), CHECK (mid > 0 and max\_number > 0 and now\_number >= 0));
-\item CREATE TABLE work1 (eid INTEGER, shopname TEXT, shopaddress TEXT, commute\_method TEXT, PRIMARY KEY (eid, shopname, shopaddress, commute\_method), CHECK (eid > 0 and (commute\_method = 'walk' or commute\_method = 'bicycle' or commute\_method = 'bus' or commute\_method = 'train' or commute\_method = 'car')));
-\item CREATE TABLE work2 (eid INTEGER, shopname TEXT, shopaddress TEXT, good\_point\_of\_shop TEXT, PRIMARY KEY (eid, shopname, shopaddress, good\_point\_of\_shop), CHECK (eid > 0));
-\item CREATE TABLE store (mid INTEGER, title TEXT, published\_year INTEGER, PRIMARY KEY (mid, title, published\_year), CHECK (mid > 0 and published\_year > 0));
-\end{itemize}
+\begin{verbatim}
+CREATE TABLE user ( 
+  mail TEXT, username TEXT, useraddress TEXT, 
+  PRIMARY KEY (mail));
+CREATE TABLE media (
+  mid INTEGER, type TEXT, 
+  PRIMARY KEY (mid), 
+  CHECK (mid > 0 and (type = 'VHS' or type = 'DVD' or type = 'Blu-ray')));
+CREATE TABLE content (
+  title TEXT, published_year INTEGER, length BLOB, publisher TEXT, genre TEXT,
+  PRIMARY KEY (title, published_year), 
+  CHECK (published_year > 0 and (genre = 'movie' or genre = 'drama' 
+           or genre = 'variety' or genre = 'anime' or genre = 'sport' 
+           or genre = 'documentary')));
+CREATE TABLE shop (
+  shopname TEXT, shopaddress TEXT, total_media INTEGER, 
+  PRIMARY KEY (shopname, shopaddress), 
+  CHECK (total_media > 0));
+CREATE TABLE clerk (
+  eid INTEGER, clerkname TEXT, 
+  PRIMARY KEY (eid), 
+  CHECK (eid > 0));
+CREATE TABLE attached_info (
+  commute_method TEXT, good_point_of_shop TEXT, 
+  PRIMARY KEY (commute_method, good_point_of_shop), 
+  CHECK (commute_method = 'walk' or commute_method = 'bicycle' or commute_method = 'bus'
+           or commute_method = 'train' or commute_method = 'car'));
+CREATE TABLE rent (
+  mail TEXT, mid INTEGER, rental_fee INTEGER, rental_date BLOB, return_date BLOB, finished TEXT,
+  PRIMARY KEY (mail, mid), 
+  CHECK (mid > 0 and rental_fee > 0 and (finished = 'yes' or finished = 'no')));
+CREATE TABLE duration (
+  rental_date BLOB, rental_duration BLOB, return_date BLOB, 
+  PRIMARY KEY (rental_date, rental_duration));
+CREATE TABLE put (
+  mid INTEGER, shopname TEXT, shopaddress TEXT, available TEXT, 
+  PRIMARY KEY (mid, shopname, shopaddress), 
+  CHECK (mid > 0 and (available = 'yes' or available = 'no')));
+CREATE TABLE work1 (
+  eid INTEGER, shopname TEXT, shopaddress TEXT, commute_method TEXT, 
+  PRIMARY KEY (eid, shopname, shopaddress, commute_method), 
+  CHECK (eid > 0 and (commute_method = 'walk' or commute_method = 'bicycle' or commute_method = 'bus' 
+           or commute_method = 'train' or commute_method = 'car')));
+CREATE TABLE work2 (
+  eid INTEGER, shopname TEXT, shopaddress TEXT, good_point_of_shop TEXT, 
+  PRIMARY KEY (eid, shopname, shopaddress, good_point_of_shop), 
+  CHECK (eid > 0));
+CREATE TABLE store (
+  mid INTEGER, title TEXT, published_year INTEGER, 
+  PRIMARY KEY (mid, title, published_year), 
+  CHECK (mid > 0 and published_year > 0));
+\end{verbatim}
 duration以外は主キーの属性からそれ以外のすべての属性への関数従属性しか存在しないので, 主キーを設定したことによって保持される. durationの関数従属性の一部は表現できていない.
 
 \section{データの構築}
 \subsection{データの挿入}
 以下のSQL文でデータを挿入した.
-\begin{itemize}
-\item INSERT INTO user VALUES('yamada@example.jp', '山田太郎', 'A県a市あ町1番地');
-\item INSERT INTO user VALUES('saitou@example.jp', '斎藤隆', 'A県b市い町2番地');
-\item INSERT INTO user VALUES('takahashi@example.jp', '高橋直子', 'B県c市う町1番地');
-\item INSERT INTO user VALUES('isikawa@example.jp', '石川敦', 'B県c市う町4番地');
-\item INSERT INTO user VALUES('yoshida@example.jp', '吉田美咲', 'A県d市え町3番地');
-\item INSERT INTO media VALUES(1, 'VHS');
-\item INSERT INTO media VALUES(2, 'DVD');
-\item INSERT INTO media VALUES(3, 'DVD');
-\item INSERT INTO media VALUES(4, 'Blu-ray');
-\item INSERT INTO media VALUES(5, 'Blu-ray');
-\item INSERT INTO content VALUES('サッカー', 2018, '2時間00分', 'A社', 'sport');
-\item INSERT INTO content VALUES('君の名は。', 2016, '2時間10分', 'B社', 'movie');
-\item INSERT INTO content VALUES('アンパンマン', 2000, '1時間30分', 'C社', 'anime');
-\item INSERT INTO content VALUES('半沢直樹', 2013, '3時間00分', 'D社', 'drama');
-\item INSERT INTO content VALUES('イッテQ', 2015, '3時間00分', 'E社', 'variety');
-\item INSERT INTO shop VALUES('A駅前店', 'A県a市あ町6番地', 2000);
-\item INSERT INTO shop VALUES('A交差点店', 'A県e市お町7番地', 5000);
-\item INSERT INTO shop VALUES('A大学前店', 'C県f市か町3番地', 5000);
-\item INSERT INTO shop VALUES('B大学前店', 'B県g市き町2番地', 10000);
-\item INSERT INTO shop VALUES('B駅前店', 'B県c市く町1番地', 4000);
-\item INSERT INTO clerk VALUES(1, '高田美穂');
-\item INSERT INTO clerk VALUES(2, '森田宏');
-\item INSERT INTO clerk VALUES(3, '山下ひかる');
-\item INSERT INTO clerk VALUES(4, '山崎健介');
-\item INSERT INTO clerk VALUES(5, '橋本渉');
-\item INSERT INTO attached\_info VALUES('walk', '近い');
-\item INSERT INTO attached\_info VALUES('bicycle', '温かい雰囲気');
-\item INSERT INTO attached\_info VALUES('bus', '待遇が良い');
-\item INSERT INTO attached\_info VALUES('bicycle', 'やりがいがある');
-\item INSERT INTO attached\_info VALUES('train', 'やりがいがある');
-\item INSERT INTO rent VALUES('yamada@example.jp', 1, 400, '4/10', '4/12');
-\item INSERT INTO rent VALUES('saitou@example.jp', 2, 700, '4/6', '4,13');
-\item INSERT INTO rent VALUES('takahashi@example.jp', 3, 380, '4/10', '4/11');
-\item INSERT INTO rent VALUES('takahashi@example,jp', 4, 380, '4/10', '4/11');
-\item INSERT INTO rent VALUES('isikawa@example.ne.jp', 5, 400, '4/9', '4/11');
-\item INSERT INTO duration VALUES('4/10', '2日', '4/12');
-\item INSERT INTO duration VALUES('4/6', '7日', '4/13');
-\item INSERT INTO duration VALUES('4/10', '1日', '4/11');
-\item INSERT INTO duration VALUES('4/9', '2日', '4/11');
-\item INSERT INTO put VALUES(1, 'A駅前店', 'A県a市あ町6番地', 3, 2);
-\item INSERT INTO put VALUES(2, 'A交差点店', 'A県e市お町7番地', 1, 1);
-\item INSERT INTO put VALUES(3, 'A大学前店', 'C県f市か町3番地', 3, 1);
-\item INSERT INTO put VALUES(4, 'B大学前店', 'B県g市き町2番地', 5, 5);
-\item INSERT INTO put VALUES(5, 'B駅前店', 'B県c市く町1番地', 2, 0);
-\item INSERT INTO work1 VALUES(1, 'B大学前店', 'B県g市き町2番地', 'walk');
-\item INSERT INTO work1 VALUES(2, 'A交差点店', 'A県e市お町7番地', 'train');
-\item INSERT INTO work1 VALUES(3, 'A大学前店', 'C県f市か町3番地', 'bicycle');
-\item INSERT INTO work1 VALUES(4, 'A駅前店', 'A県a市あ町6番地', 'bicycle');
-\item INSERT INTO work1 VALUES(5, 'B駅前店', 'B県c市く町1番地', 'bus');
-\item INSERT INTO work1 VALUES(3, 'A大学前店', 'C県f市か町3番地', 'bus');
-\item INSERT INTO work2 VALUES(1, 'B大学前店', 'B県g市き町2番地', '近い');
-\item INSERT INTO work2 VALUES(2, 'A交差点店', 'A県e市お町7番地', 'やりがいがある');
-\item INSERT INTO work2 VALUES(3, 'A大学前店', 'C県f市か町3番地', '温かい雰囲気');
-\item INSERT INTO work2 VALUES(4, 'A駅前店', 'A県a市あ町6番地', 'やりがいがある');
-\item INSERT INTO work2 VALUES(5, 'B駅前店', 'B県c市く町1番地', '待遇が良い');
-\item INSERT INTO work2 VALUES(3, 'A大学前店', 'C県f市か町3番地', '待遇が良い');
-\item INSERT INTO store VALUES(1, 'サッカー', 2018);
-\item INSERT INTO store VALUES(2, '君の名は。', 2016);
-\item INSERT INTO store VALUES(3, 'アンパンマン', 2000);
-\item INSERT INTO store VALUES(4, '半沢直樹', 2013);
-\item INSERT INTO store VALUES(5, 'イッテQ', 2015);
-\end{itemize}
+\begin{verbatim}
+INSERT INTO user VALUES('yamada@example.jp', '山田太郎', 'A県a市あ町1番地');
+INSERT INTO user VALUES('saitou@example.jp', '斎藤隆', 'A県b市い町2番地');
+INSERT INTO user VALUES('takahashi@example.jp', '高橋直子', 'B県c市う町1番地');
+INSERT INTO user VALUES('isikawa@example.jp', '石川敦', 'B県c市う町4番地');
+INSERT INTO user VALUES('yoshida@example.jp', '吉田美咲', 'A県d市え町3番地');
+INSERT INTO media VALUES(1, 'VHS');
+INSERT INTO media VALUES(2, 'DVD');
+INSERT INTO media VALUES(3, 'DVD');
+INSERT INTO media VALUES(4, 'Blu-ray');
+INSERT INTO media VALUES(5, 'Blu-ray');
+INSERT INTO content VALUES('サッカー', 2018, '2時間00分', 'A社', 'sport');
+INSERT INTO content VALUES('君の名は。', 2016, '2時間10分', 'B社', 'movie');
+INSERT INTO content VALUES('アンパンマン', 2000, '1時間30分', 'C社', 'anime');
+INSERT INTO content VALUES('半沢直樹', 2013, '3時間00分', 'D社', 'drama');
+INSERT INTO content VALUES('イッテQ', 2015, '3時間00分', 'E社', 'variety');
+INSERT INTO shop VALUES('A駅前店', 'A県a市あ町6番地', 2000);
+INSERT INTO shop VALUES('A交差点店', 'A県e市お町7番地', 5000);
+INSERT INTO shop VALUES('A大学前店', 'C県f市か町3番地', 5000);
+INSERT INTO shop VALUES('B大学前店', 'B県g市き町2番地', 10000);
+INSERT INTO shop VALUES('B駅前店', 'B県c市く町1番地', 4000);
+INSERT INTO clerk VALUES(1, '高田美穂');
+INSERT INTO clerk VALUES(2, '森田宏');
+INSERT INTO clerk VALUES(3, '山下ひかる');
+INSERT INTO clerk VALUES(4, '山崎健介');
+INSERT INTO clerk VALUES(5, '橋本渉');
+INSERT INTO attached_info VALUES('walk', '近い');
+INSERT INTO attached_info VALUES('bicycle', '温かい雰囲気');
+INSERT INTO attached_info VALUES('bus', '待遇が良い');
+INSERT INTO attached_info VALUES('bicycle', 'やりがいがある');
+INSERT INTO attached_info VALUES('train', 'やりがいがある');
+INSERT INTO rent VALUES('yamada@example.jp', 1, 400, '2018/4/10', '2018/4/12', 'yes');
+INSERT INTO rent VALUES('saitou@example.jp', 2, 700, '2018/5/6', '2018/5/13', 'yes');
+INSERT INTO rent VALUES('takahashi@example.jp', 3, 380, '2018/8/10', '2018/8/11', 'yes');
+INSERT INTO rent VALUES('takahashi@example.jp', 4, 380, '2018/8/10', '2018/8/11', 'yes');
+INSERT INTO rent VALUES('isikawa@example.ne.jp', 5, 400, '2018/12/18', '2018/12/20', 'no');
+INSERT INTO duration VALUES('2018/4/10', '2日', '2018/4/12');
+INSERT INTO duration VALUES('2018/5/6', '7日', '2018/5/13');
+INSERT INTO duration VALUES('2018/8/10', '1日', '2018/8/11');
+INSERT INTO duration VALUES('2018/12/18', '2日', '2018/12/20');
+INSERT INTO put VALUES(1, 'A駅前店', 'A県a市あ町6番地', 'yes');
+INSERT INTO put VALUES(2, 'A交差点店', 'A県e市お町7番地', 'yes');
+INSERT INTO put VALUES(3, 'A大学前店', 'C県f市か町3番地', 'yes');
+INSERT INTO put VALUES(4, 'B大学前店', 'B県g市き町2番地', 'yes');
+INSERT INTO put VALUES(5, 'B駅前店', 'B県c市く町1番地', 'no');
+INSERT INTO work1 VALUES(1, 'B大学前店', 'B県g市き町2番地', 'walk');
+INSERT INTO work1 VALUES(2, 'A交差点店', 'A県e市お町7番地', 'train');
+INSERT INTO work1 VALUES(3, 'A大学前店', 'C県f市か町3番地', 'bicycle');
+INSERT INTO work1 VALUES(4, 'A駅前店', 'A県a市あ町6番地', 'bicycle');
+INSERT INTO work1 VALUES(5, 'B駅前店', 'B県c市く町1番地', 'bus');
+INSERT INTO work1 VALUES(3, 'A大学前店', 'C県f市か町3番地', 'bus');
+INSERT INTO work2 VALUES(1, 'B大学前店', 'B県g市き町2番地', '近い');
+INSERT INTO work2 VALUES(2, 'A交差点店', 'A県e市お町7番地', 'やりがいがある');
+INSERT INTO work2 VALUES(3, 'A大学前店', 'C県f市か町3番地', '温かい雰囲気');
+INSERT INTO work2 VALUES(4, 'A駅前店', 'A県a市あ町6番地', 'やりがいがある');
+INSERT INTO work2 VALUES(5, 'B駅前店', 'B県c市く町1番地', '待遇が良い');
+INSERT INTO work2 VALUES(3, 'A大学前店', 'C県f市か町3番地', '待遇が良い');
+INSERT INTO store VALUES(1, 'サッカー', 2018);
+INSERT INTO store VALUES(2, '君の名は。', 2016);
+INSERT INTO store VALUES(3, 'アンパンマン', 2000);
+INSERT INTO store VALUES(4, '半沢直樹', 2013);
+INSERT INTO store VALUES(5, 'イッテQ', 2015);
+\end{verbatim}
 \subsection{データの出力}
 どんなデータを入れたかは前述したので, userとmediaのみを示す.
+\begin{description}
+\item[user] \leavevmode \\
+\begin{verbatim}
+yamada@example.jp|山田太郎|A県a市あ町1番地
+saitou@example.jp|斎藤隆|A県b市い町2番地
+takahashi@example.jp|高橋直子|B県c市う町1番地
+isikawa@example.jp|石川敦|B県c市う町4番地
+yoshida@example.jp|吉田美咲|A県d市え町3番地
+\end{verbatim}
+\item[media] \leavevmode \\
+\begin{verbatim}
+1|VHS
+2|DVD
+3|DVD
+4|Blu-ray
+5|Blu-ray
+\end{verbatim}
+\end{description}
 \end{document}

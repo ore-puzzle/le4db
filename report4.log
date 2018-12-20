@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.14159265-p3.6-141210-2.6 (utf8.euc) (TeX Live 2015/Debian) (preloaded format=platex 2018.1.10)  14 DEC 2018 09:06
+This is e-pTeX, Version 3.14159265-p3.6-141210-2.6 (utf8.euc) (TeX Live 2015/Debian) (preloaded format=platex 2018.1.10)  20 DEC 2018 13:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -127,38 +127,228 @@ LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <14.4> not available
 (Font)              Font shape `JT1/gt/m/n' tried instead on input line 16.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <14.4> not available
 (Font)              Font shape `JY1/gt/m/n' tried instead on input line 16.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 21.
- (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
-File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 21.
 
-Overfull \hbox (1.3177pt too wide) in paragraph at lines 25--26
-[]\OT1/cmr/m/n/10 CREATE TA-BLE clerk (eid IN-TE-GER, clerk-name TEXT, PRI-MARY
-
+Overfull \hbox (61.49661pt too wide) in paragraph at lines 71--71
+[]  \OT1/cmtt/m/n/10 CHECK (mid > 0 and (type = 'VHS' or type = 'DVD' or type =
+ 'Blu-ray')));[] 
  []
 
 
-Overfull \hbox (37.30411pt too wide) in paragraph at lines 26--27
-[]\OT1/cmr/m/n/10 CREATE TA-BLE at-tached[]info (com-mute[]method TEXT, good[]p
-oint[]of[]shop
+Overfull \hbox (82.49643pt too wide) in paragraph at lines 71--71
+[]  \OT1/cmtt/m/n/10 title TEXT, published_year INTEGER, length BLOB, publisher
+ TEXT, genre TEXT,[] 
  []
 
 
-Overfull \hbox (4.47626pt too wide) in paragraph at lines 28--29
-[]\OT1/cmr/m/n/10 CREATE TA-BLE du-ra-tion (rental[]date BLOB, rental[]duration
- BLOB,
+Overfull \hbox (24.74693pt too wide) in paragraph at lines 71--71
+[]  \OT1/cmtt/m/n/10 CHECK (published_year > 0 and (genre = 'movie' or genre = 
+'drama'[] 
  []
 
-[2] [3] (./report4.aux) ) 
+
+Overfull \hbox (35.24684pt too wide) in paragraph at lines 71--71
+[]           \OT1/cmtt/m/n/10 or genre = 'variety' or genre = 'anime' or genre 
+= 'sport'[] 
+ []
+
+
+Overfull \hbox (134.99597pt too wide) in paragraph at lines 71--71
+[]  \OT1/cmtt/m/n/10 CHECK (commute_method = 'walk' or commute_method = 'bicycl
+e' or commute_method = 'bus'[] 
+ []
+
+
+Overfull \hbox (24.74693pt too wide) in paragraph at lines 71--71
+[]           \OT1/cmtt/m/n/10 or commute_method = 'train' or commute_method = '
+car'));[] 
+ []
+
+
+Overfull \hbox (98.24629pt too wide) in paragraph at lines 71--71
+[]  \OT1/cmtt/m/n/10 mail TEXT, mid INTEGER, rental_fee INTEGER, rental_date BL
+OB, return_date BLOB,[] 
+ []
+
+[2]
+Overfull \hbox (129.74602pt too wide) in paragraph at lines 71--71
+[]  \OT1/cmtt/m/n/10 mid INTEGER, shopname TEXT, shopaddress TEXT, max_number I
+NTEGER, now_number INTEGER,[] 
+ []
+
+
+Overfull \hbox (29.99689pt too wide) in paragraph at lines 71--71
+[]  \OT1/cmtt/m/n/10 eid INTEGER, shopname TEXT, shopaddress TEXT, commute_meth
+od TEXT,[] 
+ []
+
+
+Overfull \hbox (203.24538pt too wide) in paragraph at lines 71--71
+[]  \OT1/cmtt/m/n/10 CHECK (eid > 0 and (commute_method = 'walk' or commute_met
+hod = 'bicycle' or commute_method = 'bus'[] 
+ []
+
+
+Overfull \hbox (29.99689pt too wide) in paragraph at lines 71--71
+[]           \OT1/cmtt/m/n/10 or commute_method = 'train' or commute_method = '
+car')));[] 
+ []
+
+
+Overfull \hbox (50.9967pt too wide) in paragraph at lines 71--71
+[]  \OT1/cmtt/m/n/10 eid INTEGER, shopname TEXT, shopaddress TEXT, good_point_o
+f_shop TEXT,[] 
+ []
+
+
+Overfull \hbox (3.74712pt too wide) in paragraph at lines 71--71
+[]  \OT1/cmtt/m/n/10 PRIMARY KEY (eid, shopname, shopaddress, good_point_of_sho
+p),[] 
+ []
+
+LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <12> not available
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 75.
+LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <12> not available
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 75.
+[3]
+Overfull \hbox (58.35448pt too wide) in paragraph at lines 139--139
+[]\OT1/cmtt/m/n/10 INSERT INTO content VALUES(' \JY1/mc/m/n/10 サ ッ カ ー\OT1/
+cmtt/m/n/10 ', 2018, '2 \JY1/mc/m/n/10 時間 \OT1/cmtt/m/n/10 00 \JY1/mc/m/n/10 
+分\OT1/cmtt/m/n/10 ', 'A \JY1/mc/m/n/10 社\OT1/cmtt/m/n/10 ', 'sport');[] 
+ []
+
+
+Overfull \hbox (3.71948pt too wide) in paragraph at lines 139--139
+[]\OT1/cmtt/m/n/10 INSERT INTO content VALUES(' \JY1/mc/m/n/10 アンパンマン\OT1
+/cmtt/m/n/10 ', 2000, '1 \JY1/mc/m/n/10 時間 \OT1/cmtt/m/n/10 30 \JY1/mc/m/n/10
+ 分\OT1/cmtt/m/n/10 ', 'C
+ []
+
+
+Overfull \hbox (59.5023pt too wide) in paragraph at lines 139--139
+[]\OT1/cmtt/m/n/10 INSERT INTO content VALUES(' \JY1/mc/m/n/10 半沢直樹\OT1/cmt
+t/m/n/10 ', 2013, '3 \JY1/mc/m/n/10 時間 \OT1/cmtt/m/n/10 00 \JY1/mc/m/n/10 分\
+OT1/cmtt/m/n/10 ', 'D \JY1/mc/m/n/10 社\OT1/cmtt/m/n/10 ', 'drama');[] 
+ []
+
+
+Overfull \hbox (66.38771pt too wide) in paragraph at lines 139--139
+[]\OT1/cmtt/m/n/10 INSERT INTO content VALUES(' \JY1/mc/m/n/10 イ ッ テ \OT1/cm
+tt/m/n/10 Q', 2015, '3 \JY1/mc/m/n/10 時間 \OT1/cmtt/m/n/10 00 \JY1/mc/m/n/10 
+分\OT1/cmtt/m/n/10 ', 'E \JY1/mc/m/n/10 社\OT1/cmtt/m/n/10 ', 'variety');[] 
+ []
+
+
+Overfull \hbox (0.40285pt too wide) in paragraph at lines 139--139
+[]\OT1/cmtt/m/n/10 INSERT INTO shop VALUES('B \JY1/mc/m/n/10 大学前店\OT1/cmtt/
+m/n/10 ', 'B \JY1/mc/m/n/10 県 \OT1/cmtt/m/n/10 g \JY1/mc/m/n/10 市き町 \OT1/cm
+tt/m/n/10 2 \JY1/mc/m/n/10 番地\OT1/cmtt/m/n/10 ', 10000);[] 
+ []
+
+
+Overfull \hbox (35.24684pt too wide) in paragraph at lines 139--139
+[]\OT1/cmtt/m/n/10 INSERT INTO rent VALUES('yamada@example.jp', 1, 400, '4/10',
+ '4/12');[] 
+ []
+
+
+Overfull \hbox (29.99689pt too wide) in paragraph at lines 139--139
+[]\OT1/cmtt/m/n/10 INSERT INTO rent VALUES('saitou@example.jp', 2, 700, '4/6', 
+'4,13');[] 
+ []
+
+
+Overfull \hbox (50.9967pt too wide) in paragraph at lines 139--139
+[]\OT1/cmtt/m/n/10 INSERT INTO rent VALUES('takahashi@example.jp', 3, 380, '4/1
+0', '4/11');[] 
+ []
+
+
+Overfull \hbox (50.9967pt too wide) in paragraph at lines 139--139
+[]\OT1/cmtt/m/n/10 INSERT INTO rent VALUES('takahashi@example,jp', 4, 380, '4/1
+0', '4/11');[] 
+ []
+
+
+Overfull \hbox (50.9967pt too wide) in paragraph at lines 139--139
+[]\OT1/cmtt/m/n/10 INSERT INTO rent VALUES('isikawa@example.ne.jp', 5, 400, '4/
+9', '4/11');[] 
+ []
+
+[4]
+Overfull \hbox (5.6528pt too wide) in paragraph at lines 139--139
+[]\OT1/cmtt/m/n/10 INSERT INTO put VALUES(2, 'A \JY1/mc/m/n/10 交差点店\OT1/cmt
+t/m/n/10 ', 'A \JY1/mc/m/n/10 県 \OT1/cmtt/m/n/10 e \JY1/mc/m/n/10 市お町 \OT1/
+cmtt/m/n/10 7 \JY1/mc/m/n/10 番地\OT1/cmtt/m/n/10 ', 1, 1);[] 
+ []
+
+
+Overfull \hbox (5.6528pt too wide) in paragraph at lines 139--139
+[]\OT1/cmtt/m/n/10 INSERT INTO put VALUES(3, 'A \JY1/mc/m/n/10 大学前店\OT1/cmt
+t/m/n/10 ', 'C \JY1/mc/m/n/10 県 \OT1/cmtt/m/n/10 f \JY1/mc/m/n/10 市か町 \OT1/
+cmtt/m/n/10 3 \JY1/mc/m/n/10 番地\OT1/cmtt/m/n/10 ', 3, 1);[] 
+ []
+
+
+Overfull \hbox (5.6528pt too wide) in paragraph at lines 139--139
+[]\OT1/cmtt/m/n/10 INSERT INTO put VALUES(4, 'B \JY1/mc/m/n/10 大学前店\OT1/cmt
+t/m/n/10 ', 'B \JY1/mc/m/n/10 県 \OT1/cmtt/m/n/10 g \JY1/mc/m/n/10 市き町 \OT1/
+cmtt/m/n/10 2 \JY1/mc/m/n/10 番地\OT1/cmtt/m/n/10 ', 5, 5);[] 
+ []
+
+
+Overfull \hbox (26.65262pt too wide) in paragraph at lines 139--139
+[]\OT1/cmtt/m/n/10 INSERT INTO work1 VALUES(1, 'B \JY1/mc/m/n/10 大学前店\OT1/c
+mtt/m/n/10 ', 'B \JY1/mc/m/n/10 県 \OT1/cmtt/m/n/10 g \JY1/mc/m/n/10 市き町 \OT
+1/cmtt/m/n/10 2 \JY1/mc/m/n/10 番地\OT1/cmtt/m/n/10 ', 'walk');[] 
+ []
+
+
+Overfull \hbox (31.90257pt too wide) in paragraph at lines 139--139
+[]\OT1/cmtt/m/n/10 INSERT INTO work1 VALUES(2, 'A \JY1/mc/m/n/10 交差点店\OT1/c
+mtt/m/n/10 ', 'A \JY1/mc/m/n/10 県 \OT1/cmtt/m/n/10 e \JY1/mc/m/n/10 市お町 \OT
+1/cmtt/m/n/10 7 \JY1/mc/m/n/10 番地\OT1/cmtt/m/n/10 ', 'train');[] 
+ []
+
+
+Overfull \hbox (42.40248pt too wide) in paragraph at lines 139--139
+[]\OT1/cmtt/m/n/10 INSERT INTO work1 VALUES(3, 'A \JY1/mc/m/n/10 大学前店\OT1/c
+mtt/m/n/10 ', 'C \JY1/mc/m/n/10 県 \OT1/cmtt/m/n/10 f \JY1/mc/m/n/10 市か町 \OT
+1/cmtt/m/n/10 3 \JY1/mc/m/n/10 番地\OT1/cmtt/m/n/10 ', 'bicycle');[] 
+ []
+
+
+Overfull \hbox (33.28032pt too wide) in paragraph at lines 139--139
+[]\OT1/cmtt/m/n/10 INSERT INTO work1 VALUES(4, 'A \JY1/mc/m/n/10 駅前店\OT1/cmt
+t/m/n/10 ', 'A \JY1/mc/m/n/10 県 \OT1/cmtt/m/n/10 a \JY1/mc/m/n/10 市あ町 \OT1/
+cmtt/m/n/10 6 \JY1/mc/m/n/10 番地\OT1/cmtt/m/n/10 ', 'bicycle');[] 
+ []
+
+
+Overfull \hbox (12.2805pt too wide) in paragraph at lines 139--139
+[]\OT1/cmtt/m/n/10 INSERT INTO work1 VALUES(5, 'B \JY1/mc/m/n/10 駅前店\OT1/cmt
+t/m/n/10 ', 'B \JY1/mc/m/n/10 県 \OT1/cmtt/m/n/10 c \JY1/mc/m/n/10 市く町 \OT1/
+cmtt/m/n/10 1 \JY1/mc/m/n/10 番地\OT1/cmtt/m/n/10 ', 'bus');[] 
+ []
+
+
+Overfull \hbox (21.40266pt too wide) in paragraph at lines 139--139
+[]\OT1/cmtt/m/n/10 INSERT INTO work1 VALUES(3, 'A \JY1/mc/m/n/10 大学前店\OT1/c
+mtt/m/n/10 ', 'C \JY1/mc/m/n/10 県 \OT1/cmtt/m/n/10 f \JY1/mc/m/n/10 市か町 \OT
+1/cmtt/m/n/10 3 \JY1/mc/m/n/10 番地\OT1/cmtt/m/n/10 ', 'bus');[] 
+ []
+
+LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <10> not available
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 143.
+LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <10> not available
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 143.
+[5] [6] (./report4.aux) ) 
 Here is how much of TeX's memory you used:
- 2073 strings out of 494865
- 28861 string characters out of 6179769
- 87213 words of memory out of 5000000
- 5520 multiletter control sequences out of 15000+600000
- 13088 words of font info for 51 fonts, out of 8000000 for 9000
+ 2064 strings out of 494865
+ 28664 string characters out of 6179769
+ 88213 words of memory out of 5000000
+ 5512 multiletter control sequences out of 15000+600000
+ 13871 words of font info for 54 fonts, out of 8000000 for 9000
  264 hyphenation exceptions out of 8191
- 27i,6n,32p,461b,226s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 27i,6n,32p,461b,379s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on report4.dvi (3 pages, 4616 bytes).
+Output written on report4.dvi (6 pages, 11916 bytes).
