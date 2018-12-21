@@ -5,9 +5,9 @@
 
 \begin{document}
 
-\title{課題4}
+\title{課題5}
 \author{1029289895 尾崎翔太}
-\date{2018/12/}
+\date{2018/12/21}
 
 \maketitle
 \newpage
@@ -15,7 +15,9 @@
 \section{関係代数の射影および選択に対応するSQL文}
 \subsection{SQL文}
 \begin{verbatim}
-SELECT title FROM content WHERE genre = 'movie';
+SELECT title 
+FROM content 
+WHERE genre = 'movie';
 \end{verbatim}
 \subsection{説明}
 表contentにおいて, genreがmovieであるもののtitleを得る.
@@ -26,7 +28,8 @@ SELECT title FROM content WHERE genre = 'movie';
 \section{関係代数の自然結合に対応するSQL文}
 \subsection{SQL文}
 \begin{verbatim}
-SELECT * FROM rent NATURAL JOIN duration;
+SELECT * 
+FROM rent NATURAL JOIN duration;
 \end{verbatim}
 \subsection{説明}
 表rentと表durationの自然結合を得る.
@@ -41,7 +44,8 @@ isikawa@example.ne.jp|5|400|2018/12/18|2018/12/20|no|2日
 \section{UNIONを含むSQL文}
 \subsection{SQL文}
 \begin{verbatim}
-SELECT * FROM work1 UNION ALL SELECT * FROM work2;
+SELECT * 
+FROM work1 UNION ALL SELECT * FROM work2;
 \end{verbatim}
 \subsection{説明}
 表work1と表work2の和集合を得る. なお, 和集合が取れる表がこれらのみだったので, この二つで和集合を取っただけで, 特に意味はない.
@@ -63,7 +67,8 @@ SELECT * FROM work1 UNION ALL SELECT * FROM work2;
 \section{EXCEPTを含むSQL文}
 \subsection{SQL文}
 \begin{verbatim}
-SELECT * FROM work1 EXCEPT SELECT * FROM work2;
+SELECT * 
+FROM work1 EXCEPT SELECT * FROM work2;
 \end{verbatim}
 \subsection{説明}
 表work1から表work2に現れるものを除いたものを得る. なお, UNIONの場合と同様の理由で, このSQL文に特に意味はない.
@@ -79,7 +84,9 @@ SELECT * FROM work1 EXCEPT SELECT * FROM work2;
 \section{DISTINCTを含むSQL文}
 \subsection{SQL文}
 \begin{verbatim}
-SELECT DISTINCT mail FROM rent WHERE finished = 'no';
+SELECT DISTINCT mail 
+FROM rent 
+WHERE finished = 'no';
 \end{verbatim}
 \subsection{説明}
 表rentにおいて, finishedがnoであるもののmailを重複なく得る.
@@ -90,7 +97,9 @@ isikawa@example.ne.jp
 \section{集合関数(COUNT, SUM, AVG, MAX, MIN)を用いたSQL文}
 \subsection{SQL文}
 \begin{verbatim}
-SELECT count(*) FROM rent WHERE mail = 'takahashi@example.jp';
+SELECT count(*) 
+FROM rent 
+WHERE mail = 'takahashi@example.jp';
 \end{verbatim}
 \subsection{説明}
 表rentにおいて, mailがtakahashi@example.jpである行の数を得る.
@@ -101,34 +110,72 @@ SELECT count(*) FROM rent WHERE mail = 'takahashi@example.jp';
 \section{副質問を含むSQL文}
 \subsection{SQL文}
 \begin{verbatim}
+SELECT title 
+FROM content 
+WHERE published_year = (SELECT published_year 
+                        FROM content 
+                        WHERE title = '半沢直樹');
 \end{verbatim}
 \subsection{説明}
+表contentにおいて, published\_yearが, 表contentにおけるtitleが半沢直樹であるもののpublished\_yearと等しいもののtitleを得る.
 \subsection{実行結果}
 \begin{verbatim}
+半沢直樹
 \end{verbatim}
 \section{UPDATEを含むSQL文}
 \subsection{SQL文}
 \begin{verbatim}
+UPDATE user 
+SET useraddress = 'A県b市お町1番地' 
+WHERE mail = 'yamada@example.jp';
+
+SELECT * 
+FROM user 
+WHERE mail = 'yamada@example.jp';
 \end{verbatim}
 \subsection{説明}
+1文目は表userにおいて, mailがyamada@example.jpである行のuseraddressをA県b市お町1番地にしている.
+2文目は更新結果を表示するためのもので, 表userにおいて, mailがyamada@example.jpである行を得ている.
 \subsection{実行結果}
 \begin{verbatim}
+yamada@example.jp|山田太郎|A県b市お町1番地
 \end{verbatim}
 \section{ORDER　BYを含むSQL文}
 \subsection{SQL文}
 \begin{verbatim}
+SELECT * 
+FROM content 
+ORDER BY published_year DESC;
 \end{verbatim}
 \subsection{説明}
+表contentにおいて, 行をpublished\_yearの降順に並べ替えたものを得る.
 \subsection{実行結果}
 \begin{verbatim}
+サッカー|2018|2時間00分|A社|sport
+君の名は。|2016|2時間10分|B社|movie
+イッテQ|2015|3時間00分|E社|variety
+半沢直樹|2013|3時間00分|D社|drama
+アンパンマン|2000|1時間30分|C社|anime
 \end{verbatim}
 \section{CREATE VIEWを含むSQL文}
 \subsection{SQL文}
 \begin{verbatim}
+CREATE VIEW bigshop AS 
+SELECT shopname, shopaddress 
+FROM shop 
+WHERE total_media >= 5000;
+
+SELECT * 
+FROM bigshop;
 \end{verbatim}
 \subsection{説明}
+1文目は表shopにおいて, total\_mediaが5000以上である行のshopnameとshopaddressからなるビューbigshopを作成している.
+2文目はビューの作成結果を表示するためのもので, ビューbigshopを得ている.
 \subsection{実行結果}
 \begin{verbatim}
+A交差点店|A県e市お町7番地
+A大学前店|C県f市か町3番地
+B大学前店|B県g市き町2番地
 \end{verbatim}
 
 \end{document}
