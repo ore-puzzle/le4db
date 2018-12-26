@@ -1,0 +1,95 @@
+\documentclass{jarticle}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{here}
+\usepackage{listings}
+
+\begin{document}
+
+\title{課題5}
+\author{1029289895 尾崎翔太}
+\date{2018/12/21}
+
+\maketitle
+\newpage
+
+\section{キャッシュ}
+\subsection{高速化}
+id, name, priceからなる表testのデータを10000000件用意して
+\begin{varbatim}
+EXPLAIN ANALYSE SELECT id, name FROM test LIMIT 100;
+\end{varbatim}
+という文を繰り返し実行した.
+結果はtable1.1のようになった.
+\begin{table}[htbp]
+  \begin{tabular}{|c||c|c|} \hline
+    & Planning Time & Execution Time \\ \hline \hline
+    1回目 & 268.038ms & 16.364ms \\ \hline
+    2回目 & 0.189ms & 0.116ms \\ \hline
+    3回目 & 0.167ms & 0.107ms \\ \hline
+    4回目 & 0.121ms & 0.095ms \\ \hline
+    5回目 & 0.150ms & 0.090ms \\ \hline
+  \end{tabular}
+  \caption{実行結果}
+  \centering
+\end{table}
+1回目とそれ以降では明らかに差があることが見て取れる.
+\subsection{キャッシュが効かないクエリ}
+様々なクエリを試してみた結果, キーではない属性について選択するようなクエリはあまり早くならないことがわかった. これは, 選択は条件式のチェックが入るので, データがキャッシュされていても時間がかかるのかなと思った. キー属性が早くなるのは, 索引が作られていることと関係があるのかなと思った.
+\section{索引の有無}
+section1と同様のデータを10000行格納した表test10000, 100000行格納した表test100000, 1000000行格納した表test1000000を用いて
+\begin{verbatim}
+EXPLAIN ANALYSE SELECT * FROM (* 各表名 *) WHERE name = 'AGB';
+\end{verbatim}
+という文を, 索引の有無を変えて実行した. 結果はtable2.1のようになった.
+\begin{table}[htbp]
+  \begin{tabular}{|c||c|c|c|} \hline
+  & test10000 & test100000 & test1000000 \\ \hline \hline
+  索引なし Planning Time & 199.770ms & 108.441ms & 207.552ms \\ \hline
+  索引なし Execution Time & 245.271ms & 2163.386ms & 13707.996ms \\ \hline
+  索引あり Planning Time & 243.257ms & 162.324ms & 388.317ms \\ \hline
+  索引あり Execution Time & 138.596ms & 357.031ms & 71.504ms \\ \hline
+  \end{tabular}
+  \centering
+  \caption{実行結果(行数)}
+\end{table}
+次に, 属性数が2, 5, 10, 50である表test2, test5, test10, test50を用いて, section1と同じ文を実行した. 結果はtable2.1の通りである.
+\begin{table}[htbp]
+  \begin{tabular}{|c||c|c|c|c|} \hline
+  & test2 & test5 & test10 & test50 \\ \hline \hline
+  索引なし Planning Time & 224.698ms & 94.312ms & 145.610ms & 537.425ms \\ \hline
+  索引なし Execution Time & 2165.536ms & 1258.916ms & 1620.546ms & 40167.935ms \ \hline
+  索引あり Planning Time & 216.681ms & 182.589ms & 210.753ms & 834.038ms \\ \hline
+  索引あり Execution Time & 53.714ms & 67.667ms & 67. 776ms & 86.820ms \\ \hline
+  \end{tabular}
+  \centering
+  \caption{実行結果(列数)}
+\end{table}
+行数の場合のように多い方がむしろ早くなるということはなかったが, どれくらい早くなるかという点においては, 列数が多い方が効果が見られる.
+\section{選択率}
+次の文によって生成された表を用いる.
+\begin{verbatim}
+CREATE TABLE test_rate (id INTEGER, data INTEGER, PRIMARY KEY (id));
+\end{verbatim}
+dataに0から999999までの整数が重複なくランダムに格納されたような1000000行のデータを用いる. この表に対して, 以下の文を実行する.
+\begin{verbatim}
+EXPLAIN ANALYSE SELECT * FROM test_rate WHERE data < 200000;
+EXPLAIN ANALYSE SELECT * FROM test_rate WHERE data < 400000;
+EXPLAIN ANALYSE SELECT * FROM test_rate WHERE data < 600000;
+EXPLAIN ANALYSE SELECT * FROM test_rate WHERE data < 800000;
+\end{verbatim}
+上から順に, 選択率が0.2, 0.4, 0.6, 0.8の場合に対応している. 結果はtable3.1の通りである.
+\begin{table}[htbp]
+  \begin{tabular}{|c||c|c|c|c|} \hline
+  & 0.2 & 0.4 & 0.6 & 0.8 \\ \hline \hline
+  索引なし Planning Time & 92.786ms & 92.751ms & 170.530ms & 226.060ms \\ \hline
+  索引なし Execution Time & 2305.741ms & 2217.160ms & 2350.566ms & 4772.773ms \\ \hline
+  索引あり Planning Time & 678.754ms & 478.278ms & 989.707ms & 689.508ms \\ \hline
+  索引あり Execution Time & 9386.464ms & 4876.238ms & 12009.779ms & 8265.277ms \\ \hline
+  \end{tabular}
+  \centering
+  \caption{実行結果(選択率)}
+\end{table}
+
+\section{主索引と二次索引}
+
+\end{document}
