@@ -53,9 +53,8 @@ public class ItemServlet extends HttpServlet {
 		Connection conn = null;
 		Statement stmt = null;
 		try {
-			Class.forName("org.postgresql.Driver");
-			conn = DriverManager.getConnection("jdbc:postgresql://" + _hostname
-					+ ":5432/" + _dbname, _username, _password);
+			Class.forName("org.sqlite.Driver");
+			conn = DriverManager.getConnection("jdbc:sqlite://" + _dbname);
 			stmt = conn.createStatement();
 
 			out.println("<form action=\"update\" method=\"GET\">");

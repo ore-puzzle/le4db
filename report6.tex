@@ -5,9 +5,9 @@
 
 \begin{document}
 
-\title{課題5}
+\title{課題6}
 \author{1029289895 尾崎翔太}
-\date{2018/12/21}
+\date{2018/12/27}
 
 \maketitle
 \newpage
@@ -15,13 +15,13 @@
 \section{キャッシュ}
 \subsection{高速化}
 id, name, priceからなる表testのデータを10000000件用意して
-\begin{varbatim}
+\begin{verbatim}
 EXPLAIN ANALYSE SELECT id, name FROM test LIMIT 100;
-\end{varbatim}
+\end{verbatim}
 という文を繰り返し実行した.
 結果はtable1.1のようになった.
 \begin{table}[htbp]
-  \begin{tabular}{|c||c|c|} \hline
+  \begin{tabular}{|l||r|r|} \hline
     & Planning Time & Execution Time \\ \hline \hline
     1回目 & 268.038ms & 16.364ms \\ \hline
     2回目 & 0.189ms & 0.116ms \\ \hline
@@ -42,7 +42,7 @@ EXPLAIN ANALYSE SELECT * FROM (* 各表名 *) WHERE name = 'AGB';
 \end{verbatim}
 という文を, 索引の有無を変えて実行した. 結果はtable2.1のようになった.
 \begin{table}[htbp]
-  \begin{tabular}{|c||c|c|c|} \hline
+  \begin{tabular}{|l||r|r|r|} \hline
   & test10000 & test100000 & test1000000 \\ \hline \hline
   索引なし Planning Time & 199.770ms & 108.441ms & 207.552ms \\ \hline
   索引なし Execution Time & 245.271ms & 2163.386ms & 13707.996ms \\ \hline
@@ -54,10 +54,10 @@ EXPLAIN ANALYSE SELECT * FROM (* 各表名 *) WHERE name = 'AGB';
 \end{table}
 次に, 属性数が2, 5, 10, 50である表test2, test5, test10, test50を用いて, section1と同じ文を実行した. 結果はtable2.1の通りである.
 \begin{table}[htbp]
-  \begin{tabular}{|c||c|c|c|c|} \hline
+  \begin{tabular}{|l||r|r|r|r|} \hline
   & test2 & test5 & test10 & test50 \\ \hline \hline
   索引なし Planning Time & 224.698ms & 94.312ms & 145.610ms & 537.425ms \\ \hline
-  索引なし Execution Time & 2165.536ms & 1258.916ms & 1620.546ms & 40167.935ms \ \hline
+  索引なし Execution Time & 2165.536ms & 1258.916ms & 1620.546ms & 40167.935ms \\ \hline
   索引あり Planning Time & 216.681ms & 182.589ms & 210.753ms & 834.038ms \\ \hline
   索引あり Execution Time & 53.714ms & 67.667ms & 67. 776ms & 86.820ms \\ \hline
   \end{tabular}
@@ -79,7 +79,7 @@ EXPLAIN ANALYSE SELECT * FROM test_rate WHERE data < 800000;
 \end{verbatim}
 上から順に, 選択率が0.2, 0.4, 0.6, 0.8の場合に対応している. 結果はtable3.1の通りである.
 \begin{table}[htbp]
-  \begin{tabular}{|c||c|c|c|c|} \hline
+  \begin{tabular}{|l||r|r|r|r|} \hline
   & 0.2 & 0.4 & 0.6 & 0.8 \\ \hline \hline
   索引なし Planning Time & 92.786ms & 92.751ms & 170.530ms & 226.060ms \\ \hline
   索引なし Execution Time & 2305.741ms & 2217.160ms & 2350.566ms & 4772.773ms \\ \hline
@@ -89,7 +89,14 @@ EXPLAIN ANALYSE SELECT * FROM test_rate WHERE data < 800000;
   \centering
   \caption{実行結果(選択率)}
 \end{table}
-
+索引を付けた方が時間がかかるというよくわからない結果になった. これまでと違って範囲選択であることが影響しているのかとも思ったが, B-treeは範囲選択にも対応しているはずなので, よくわからない. 選択率については, 索引なしでは0.8の場合だけ時間がかかっている一方, 索引ありでは時間はバラバラなので, 結局選択率による差はあまりないと思った.
 \section{主索引と二次索引}
+主索引は主キーに関する索引で, 二次索引はそれ以外の属性に関する索引である. それだけの差なので, 性能には違いがなさそうであるが, 主キーは必ずユニークであるので, その点で性能がよい. 二次索引もユニークであったり, 適切なインデックスを定めたりすることで性能がよくなることが期待される.
+
+\section{参考文献}
+\begin{itemize}
+\item 「二次索引」, "https://www.kunihikokaneko.com/cc/db/7.html", 2018/12/27
+\end{itemize}
+
 
 \end{document}
