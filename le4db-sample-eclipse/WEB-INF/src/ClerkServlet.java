@@ -8,14 +8,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("serial")
-public class BranchServlet extends HttpServlet {
+public class ClerkServlet extends HttpServlet {
 
 	private String _hostname = null;
 	private String _dbname = null;
@@ -44,17 +43,13 @@ public class BranchServlet extends HttpServlet {
 
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
-
-		String identifier = request.getParameter("identifier");
-		String password = request.getParameter("password");
 		
-		int eid;
-		boolean isClerk = true;
-		try {
-			eid = Integer.parseInt(identifier);
-		} catch(NumberFormatException e) {
-			isClerk = false;
-		}
+		String eid = request.getParameter("eid");
+
+		out.println("<html>");
+		out.println("<body>");
+
+		out.println("<h3>店舗一覧</h3>");
 
 		Connection conn = null;
 		Statement stmt = null;
@@ -63,32 +58,16 @@ public class BranchServlet extends HttpServlet {
 			conn = DriverManager.getConnection("jdbc:sqlite://" + _dbname);
 			stmt = conn.createStatement();
 
-			if(identifier.equals("supervisor")) {
-				if(password.equals("svpw")) {
-					RequestDispatcher dispatch = request.getRequestDispatcher("/supervisor");
-					dispatch.forward(request, response);
-				} else {
-					response.sendRedirect("/login");
-				}
-			} else if (isClerk) {
-				ResultSet rs = stmt.executeQuery("SELECT password FROM work1 WHERE eid = " + eid);
-				if(password.equals(rs.getString("password"))) {
-					RequestDispatcher dispatch = request.getRequestDispatcher("/clerk");
-					dispatch.forward(request, response);
-				} else {
-					response.sendRedirect("/login");
-				}				
-				rs.close();				
-			} else {
-				ResultSet rs = stmt.executeQuery("SELECT password FROM user WHERE mailaddress = " + identifier);
-				if(password.equals(rs.getString("password"))) {
-					RequestDispatcher dispatch = request.getRequestDispatcher("/user");
-					dispatch.forward(request, response);
-				} else {
-					response.sendRedirect("/login");
-				}				
-				rs.close();				
+			ResultSet rs = stmt.executeQuery("SELECT shopname, shopaddress FROM work1 WHERE eid = " + eid);
+			while (rs.next()) {
+				String shopName = rs.getString("shopname");
+				String shopAddress = rs.getString("shopaddress")
+				out.println("<a href=\"ShopServlet?shopname=" + shopName + "&shopaddress=" + shopAddress + "&filter=\"no\"" + "\">");
+				out.println(shopName + " " + shopAddress);
+				out.println("/a>");
+				out.println("<br>");
 			}
+			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -101,6 +80,8 @@ public class BranchServlet extends HttpServlet {
 			}
 		}
 
+		out.println("</body>");
+		out.println("</html>");
 	}
 
 	protected void doPost(HttpServletRequest request,

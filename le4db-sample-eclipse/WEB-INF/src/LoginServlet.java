@@ -29,12 +29,12 @@ public class ListServlet extends HttpServlet {
 		out.println("<body>");
 
 		out.println("<h3>ログイン</h3>");
-		out.println("<form action=\"search\" method=\"GET\">");
+		out.println("<form action=\"branch\" method=\"GET\">");
 		out.println("メールアドレス： ");
 		out.println("<input type=\"text\" name=\"identifier\"/>");
 		out.println("<br/>");
 		out.println("パスワード： ");
-		out.println("<input type=\"text\" name=\"password\"/>");
+		out.println("<input type=\"password\" name=\"password\"/>");
 		out.println("<br/>");
 		out.println("<input type=\"submit\" value=\"ログイン\"/>");
 		out.println("</form>");
