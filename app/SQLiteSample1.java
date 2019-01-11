@@ -20,7 +20,7 @@ public class SQLiteSample1 {
             System.out.println("テーブル作成");
 
             stmt.executeUpdate("INSERT INTO product VALUES(1, 'AAA', 100)");
-            stmt.executeUpdate("INSERT INTO product VALUES(2, 'BBB', 80)");
+            stmt.executeUpdate("INSERT INTO product VALUES(1, 'BBB', 180)");
             stmt.executeUpdate("INSERT INTO product VALUES(3, 'CCC', 220)");
             System.out.println("データ挿入");
 

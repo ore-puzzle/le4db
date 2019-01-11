@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+  PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+  "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+
+  <servlet>
+    <servlet-name>List</servlet-name>
+    <servlet-class>ListServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>Search</servlet-name>
+    <servlet-class>SearchServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>Add</servlet-name>
+    <servlet-class>AddServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>Item</servlet-name>
+    <servlet-class>ItemServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>Update</servlet-name>
+    <servlet-class>UpdateServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>Delete</servlet-name>
+    <servlet-class>DeleteServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>Branch</servlet-name>
+    <servlet-class>BranchServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>Login</servlet-name>
+    <servlet-class>LoginServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>Shop</servlet-name>
+    <servlet-class>ShopServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>Supervisor</servlet-name>
+    <servlet-class>SupervisorServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>Clerk</servlet-name>
+    <servlet-class>ClerkServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>Return</servlet-name>
+    <servlet-class>ReturnServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>AddRentalInput</servlet-name>
+    <servlet-class>AddRentalInputServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>AddRental</servlet-name>
+    <servlet-class>AddRentalServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>List</servlet-name>
+    <url-pattern>/list</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>Search</servlet-name>
+    <url-pattern>/search</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>Add</servlet-name>
+    <url-pattern>/add</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>Item</servlet-name>
+    <url-pattern>/item</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>Update</servlet-name>
+    <url-pattern>/update</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>Delete</servlet-name>
+    <url-pattern>/delete</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>Branch</servlet-name>
+    <url-pattern>/branch</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>Login</servlet-name>
+    <url-pattern>/login</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>Shop</servlet-name>
+    <url-pattern>/shop</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>Supervisor</servlet-name>
+    <url-pattern>/supervisor</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>Clerk</servlet-name>
+    <url-pattern>/clerk</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>Return</servlet-name>
+    <url-pattern>/return</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>AddRentalInput</servlet-name>
+    <url-pattern>/add_rental_input</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>AddRental</servlet-name>
+    <url-pattern>/add_rental</url-pattern>
+  </servlet-mapping>
+
+</web-app>
