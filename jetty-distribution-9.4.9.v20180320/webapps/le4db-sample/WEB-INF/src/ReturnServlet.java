@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.util.Properties;
 
 import javax.servlet.ServletException;
@@ -42,17 +43,18 @@ public class ReturnServlet extends HttpServlet {
                 HttpSession session = request.getSession(true);
 
 		String mailAddress = request.getParameter("mail");
-		String mid = request.getParameter("mid");
+		int mid = Integer.parseInt(request.getParameter("mid"));
 
 		Connection conn = null;
-		Statement stmt = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
                         String dbfile = getServletContext().getRealPath("WEB-INF/" + _dbname);
 			conn = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
-			stmt = conn.createStatement();
 
-			stmt.executeUpdate("UPDATE rent SET finished = 'yes' WHERE mail = '" + mailAddress + "' and mid = " + mid);
+			PreparedStatement st = conn.prepareStatement("UPDATE rent SET finished = 'yes' WHERE mail = ? and mid = ?");
+			st.setString(1, mailAddress);
+			st.setInt(2, mid);
+			st.executeUpdate();
 
 			session.setAttribute("return_status", "returned");
 			response.sendRedirect("/le4db-sample/shop");

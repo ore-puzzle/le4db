@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.util.Properties;
 import java.util.Calendar;
 
@@ -109,11 +110,19 @@ public class AddRentalServlet extends HttpServlet {
 				response.sendRedirect("/le4db-sample/shop");
 			}
 			
-			stmt.executeUpdate("INSERT INTO rent VALUES('" + mailAddress + "', " + mid + ", " + fee + ", '" 
-                                           + rentalDate + "', '" + returnDate + "', 'no')");
+			PreparedStatement st1 = conn.prepareStatement("INSERT INTO rent VALUES(?, ?, ?, ?, ?, 'no')");
+            st1.setString(1, mailAddress);
+            st1.setInt(2, Integer.parseInt(mid));
+            st1.setInt(3, Integer.parseInt(fee));
+            st1.setString(4, rentalDate);
+            st1.setString(5, returnDate);
+			st1.executeUpdate();
 
-			stmt.executeUpdate("INSERT INTO duration VALUES('" + rentalDate + "', '"
-				           + rentalDuration + "', '" + returnDate + ")");
+			PreparedStatement st2 = conn.prepareStatement("INSERT INTO duration VALUES(?, ?, ?)");
+			st2.setString(1, rentalDate);
+			st2.setString(2, rentalDuration);
+			st2.setString(3, rentalDate);
+			st2.executeUpdate();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
