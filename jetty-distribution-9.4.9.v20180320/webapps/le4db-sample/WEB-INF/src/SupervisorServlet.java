@@ -41,65 +41,11 @@ public class SupervisorServlet extends HttpServlet {
 		out.println("<html>");
 		out.println("<body>");
 
-		out.println("<h3>検索</h3>");
-		out.println("<form action=\"search\" method=\"GET\">");
-		out.println("店舗名： ");
-		out.println("<input type=\"text\" name=\"search_name\"/>");
-		out.println("<br/>");
-		out.println("<input type=\"submit\" value=\"検索\"/>");
-		out.println("</form>");
+		out.println("<h3>管理者ページ</h3>");
 
-		out.println("<h3>一覧</h3>");
-		Connection conn = null;
-		Statement stmt = null;
-		try {
-			Class.forName("org.sqlite.JDBC");
-                        String dbfile = getServletContext().getRealPath("WEB-INF/" + _dbname);
-			conn = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
-			stmt = conn.createStatement();
-
-			out.println("<table border=\"1\">");
-			out.println("<tr><th>商品ID</th><th>商品名</th><th>価格</th></tr>");
-
-			ResultSet rs = stmt.executeQuery("SELECT * FROM products");
-			while (rs.next()) {
-				int pid = rs.getInt("pid");
-				String name = rs.getString("name");
-				int price = rs.getInt("price");
-
-				out.println("<tr>");
-				out.println("<td><a href=\"item?pid=" + pid + "\">" + pid
-						+ "</a></td>");
-				out.println("<td>" + name + "</td>");
-				out.println("<td>" + price + "</td>");
-				out.println("</tr>");
-			}
-			rs.close();
-
-			out.println("</table>");
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-
-		out.println("<h3>追加</h3>");
-		out.println("<form action=\"add\" method=\"GET\">");
-		out.println("商品名： ");
-		out.println("<input type=\"text\" name=\"add_name\"/>");
-		out.println("<br/>");
-		out.println("価格： ");
-		out.println("<input type=\"text\" name=\"add_price\"/>");
-		out.println("<br/>");
-		out.println("<input type=\"submit\" value=\"追加\"/>");
-		out.println("</form>");
+		out.println("<a href=\"shoplist_sv\">店員の追加/削除</a>");
+		out.println("<br><br>");
+		out.println("<a href=\"\">メディアの追加/削除</a>");
 
 		out.println("</body>");
 		out.println("</html>");

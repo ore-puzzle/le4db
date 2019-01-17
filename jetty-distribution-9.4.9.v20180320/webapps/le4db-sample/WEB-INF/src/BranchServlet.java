@@ -63,7 +63,7 @@ public class BranchServlet extends HttpServlet {
 
 			if(identifier.equals("supervisor")) {
 				if(password.equals("svpw")) {
-                                        session.setAttribute("identifier", "svpw");
+                                        session.setAttribute("identifier", "supervisor");
 					RequestDispatcher dispatch = request.getRequestDispatcher("/supervisor");
 					dispatch.forward(request, response);
 				} else {

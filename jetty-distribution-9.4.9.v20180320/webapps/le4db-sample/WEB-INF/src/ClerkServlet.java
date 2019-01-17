@@ -64,7 +64,7 @@ public class ClerkServlet extends HttpServlet {
 
 			out.println("<h3>" + clerkName + " さん</h3>");
 			out.println("<a href=\"shoplist\">店舗一覧</a>");
-			out.println("<br>");
+			out.println("<br><br>");
 			out.println("<a href=\"add_user_input\">ユーザ登録</a>");
 
 		} catch (Exception e) {

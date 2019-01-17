@@ -112,12 +112,12 @@ public class ShopServlet extends HttpServlet {
 		out.println("貸出状況</h3>");
 		out.println(addStr);
 		out.println(returnStr);
-		out.println("<a href=\"add_rental_input\"> 追加する</a>");
+		out.println("<a href=\"add_rental_input\">追加する</a>");
 		out.println("<br>");
 		out.println(usedAddressStr);
 		out.println("<form action=\"shop\" method=\"GET\">");
                 out.println("メールアドレスで検索: ");
-                out.println("<input type=\"text\" name=\"search_mail\"/>");
+                out.println("<input type=\"text\" name=\"search_mail\" value=\"ishikawa@example.jp\"/>");
 		out.println("<input type=\"submit\" value=\"検索\"/>");
                 out.println("<br>");
 		out.println("<form action=\"shop\" method=\"GET\">");

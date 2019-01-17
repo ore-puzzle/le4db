@@ -90,6 +90,16 @@
     <servlet-class>AddUserInputServlet</servlet-class>
   </servlet>
 
+  <servlet>
+    <servlet-name>AddUserInput</servlet-name>
+    <servlet-class>AddUserInputServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>ShopListSV</servlet-name>
+    <servlet-class>ShopListSVServlet</servlet-class>
+  </servlet>
+
   <servlet-mapping>
     <servlet-name>List</servlet-name>
     <url-pattern>/list</url-pattern>
@@ -173,6 +183,11 @@
   <servlet-mapping>
     <servlet-name>AddUserInput</servlet-name>
     <url-pattern>/add_user_input</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>ShopListSV</servlet-name>
+    <url-pattern>/shoplist_sv</url-pattern>
   </servlet-mapping>
 
 </web-app>
