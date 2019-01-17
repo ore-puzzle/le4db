@@ -46,28 +46,21 @@ public class AddRentalServlet extends HttpServlet {
 		String mailAddress = request.getParameter("mail");
 		String mid = request.getParameter("mid");
 		String fee = request.getParameter("fee");
-		String rentalYear = request.getParameter("rental_year");
-		String rentalMonth = request.getParameter("rental_month");
-		String rentalDay = request.getParameter("rental_day");
-		String rentalDuration = request.getParameter("rantal_duration");
+		int rentalYear = (Integer)session.getAttribute("rental_year");
+		int rentalMonth = (Integer)session.getAttribute("rental_month");
+		int rentalDay = (Integer)session.getAttribute("rental_day");
+		String rentalDuration = request.getParameter("rental_duration");
 
 
 		String rentalDate = rentalYear + "/" + rentalMonth + "/" + rentalDay;
 
 		Calendar calendar = Calendar.getInstance();
-		try {
-			calendar.clear();
-			calendar.setLenient(false);
-			calendar.set(Integer.parseInt(rentalYear), Integer.parseInt(rentalMonth) - 1, Integer.parseInt(rentalDay));
-			calendar.setLenient(true);
-			calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(rentalDuration));
-		} catch(IllegalArgumentException e) {
-			session.setAttribute("add_rental_status", "reject");
-			response.sendRedirect("/le4db-sample/shop");
-		}
+		calendar.clear();
+		calendar.set(rentalYear, rentalMonth, rentalDay);
+		calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(rentalDuration));
 
 		String returnYear = String.valueOf(calendar.get(Calendar.YEAR));
-		String returnMonth = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+		String returnMonth = String.valueOf(calendar.get(Calendar.MONTH));
 		if(returnMonth.length() == 1) {
 			returnMonth = "0" + returnMonth;
 		}
@@ -82,8 +75,9 @@ public class AddRentalServlet extends HttpServlet {
 			Integer.parseInt(mid);
 			Integer.parseInt(fee);
 		} catch(NumberFormatException e) {
-			session.setAttribute("add_rental_status", "reject");
-			response.sendRedirect("/le4db-sample/shop");
+			session.setAttribute("add_rental_status", "reject_not_num");
+			response.sendRedirect("/le4db-sample/add_rental_input");
+			return;
 		}
 
 		Connection conn = null;
@@ -103,19 +97,27 @@ public class AddRentalServlet extends HttpServlet {
 			int existsMedia = -1;
 			ResultSet rs2 = stmt.executeQuery("SELECT count(*) AS num FROM put WHERE mid =" + mid);
 			while (rs2.next()) {
-				existsUser = rs2.getInt("num");		
+				existsMedia = rs2.getInt("num");		
 			}
 			if(existsUser == 0 || existsMedia == 0) {
-				session.setAttribute("add_rental_status", "reject");
-				response.sendRedirect("/le4db-sample/shop");
+				session.setAttribute("add_rental_status", "reject_not_found");
+				response.sendRedirect("/le4db-sample/add_rental_input");
+				try {
+					if (conn != null) {
+						conn.close();
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				return;
 			}
 			
 			PreparedStatement st1 = conn.prepareStatement("INSERT INTO rent VALUES(?, ?, ?, ?, ?, 'no')");
-            st1.setString(1, mailAddress);
-            st1.setInt(2, Integer.parseInt(mid));
-            st1.setInt(3, Integer.parseInt(fee));
-            st1.setString(4, rentalDate);
-            st1.setString(5, returnDate);
+			st1.setString(1, mailAddress);
+			st1.setInt(2, Integer.parseInt(mid));
+			st1.setInt(3, Integer.parseInt(fee));
+			st1.setString(4, rentalDate);
+			st1.setString(5, returnDate);
 			st1.executeUpdate();
 
 			PreparedStatement st2 = conn.prepareStatement("INSERT INTO duration VALUES(?, ?, ?)");
@@ -137,7 +139,8 @@ public class AddRentalServlet extends HttpServlet {
 		}
 
 		session.setAttribute("add_rental_status", "accept");
-		response.sendRedirect("/le4db-sample/shop?mail=" + mailAddress + "&fee=" + fee + "&rental_date=" + rentalDate + "&return_date=" + returnDate);
+		response.sendRedirect("/le4db-sample/shop?mail=" + mailAddress + "&mid=" + mid + 
+                                      "&fee=" + fee + "&rental_date=" + rentalDate + "&return_date=" + returnDate);
 
 	}
 

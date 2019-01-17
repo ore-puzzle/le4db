@@ -75,6 +75,21 @@
     <servlet-class>AddRentalServlet</servlet-class>
   </servlet>
 
+  <servlet>
+    <servlet-name>ShopList</servlet-name>
+    <servlet-class>ShopListServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>AddUser</servlet-name>
+    <servlet-class>AddUserServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>AddUserInput</servlet-name>
+    <servlet-class>AddUserInputServlet</servlet-class>
+  </servlet>
+
   <servlet-mapping>
     <servlet-name>List</servlet-name>
     <url-pattern>/list</url-pattern>
@@ -143,6 +158,21 @@
   <servlet-mapping>
     <servlet-name>AddRental</servlet-name>
     <url-pattern>/add_rental</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>ShopList</servlet-name>
+    <url-pattern>/shoplist</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>AddUser</servlet-name>
+    <url-pattern>/add_user</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>AddUserInput</servlet-name>
+    <url-pattern>/add_user_input</url-pattern>
   </servlet-mapping>
 
 </web-app>

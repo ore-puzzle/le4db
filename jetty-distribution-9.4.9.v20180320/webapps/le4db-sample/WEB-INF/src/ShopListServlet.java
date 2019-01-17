@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("serial")
-public class ClerkServlet extends HttpServlet {
+public class ShopListServlet extends HttpServlet {
 
 	private String _dbname = null;
 
@@ -42,9 +42,13 @@ public class ClerkServlet extends HttpServlet {
 		
                 HttpSession session = request.getSession(true);
 		int eid = (Integer)session.getAttribute("identifier");
+		session.setAttribute("filter", "no");
+		session.removeAttribute("search_mail");
 
 		out.println("<html>");
 		out.println("<body>");
+
+		out.println("<h3>店舗一覧</h3>");
 
 		Connection conn = null;
 		Statement stmt = null;
@@ -54,18 +58,22 @@ public class ClerkServlet extends HttpServlet {
 			conn = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
 			stmt = conn.createStatement();
 
-			
-			String clerkName = "";
-			ResultSet rs = stmt.executeQuery("SELECT clerkname FROM clerk WHERE eid = " + eid);
+			out.println("<table border=\"1\">");
+			out.println("<tr><th>店名</th><th>住所</th></tr>");
+
+			ResultSet rs = stmt.executeQuery("SELECT shopname, shopaddress FROM work1 WHERE eid = " + eid);
 			while (rs.next()) {
-				clerkName = rs.getString("clerkname");
+				String shopName = rs.getString("shopname");
+				String shopAddress = rs.getString("shopaddress");
+				out.println("<tr>");
+				out.println("<td><a href=\"shop?shopname=" + shopName + "&shopaddress=" + shopAddress + "\">");
+				out.println(shopName + "</a></td>");
+				out.println("<td>" + shopAddress + "</td>");
+				out.println("</tr>");
 			}
 			rs.close();
 
-			out.println("<h3>" + clerkName + " さん</h3>");
-			out.println("<a href=\"shoplist\">店舗一覧</a>");
-			out.println("<br>");
-			out.println("<a href=\"add_user_input\">ユーザ登録</a>");
+			out.println("</table>");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -78,6 +86,9 @@ public class ClerkServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
+
+		out.println("<br>");
+		out.println("<a href=\"clerk\">前のページに戻る</a>");
 
 		out.println("</body>");
 		out.println("</html>");

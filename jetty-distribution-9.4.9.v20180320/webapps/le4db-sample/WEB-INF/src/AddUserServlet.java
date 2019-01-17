@@ -1,6 +1,7 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -16,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("serial")
-public class ClerkServlet extends HttpServlet {
+public class AddUserServlet extends HttpServlet {
 
 	private String _dbname = null;
 
@@ -39,36 +40,57 @@ public class ClerkServlet extends HttpServlet {
 
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
-		
-                HttpSession session = request.getSession(true);
-		int eid = (Integer)session.getAttribute("identifier");
 
-		out.println("<html>");
-		out.println("<body>");
+		HttpSession session = request.getSession(true);
+
+		String mailAddress = request.getParameter("mail");
+		String userName = request.getParameter("username");
+		String userAddress = request.getParameter("useraddress");
+		String password = request.getParameter("password");
+
+		if(!mailAddress.contains("@")) {
+			session.setAttribute("add_user_status", "reject_not_address");
+			response.sendRedirect("/le4db-sample/add_user_input");
+			return;
+		}
 
 		Connection conn = null;
 		Statement stmt = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
-                        String dbfile = getServletContext().getRealPath("WEB-INF/" + _dbname);
+			String dbfile = getServletContext().getRealPath("WEB-INF/" + _dbname);
 			conn = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
 			stmt = conn.createStatement();
+			
+			int existsUser = -1;
+			ResultSet rs = stmt.executeQuery("SELECT count(*) AS num FROM user WHERE mail = '" + mailAddress + "'");
+			while(rs.next()) {
+				existsUser = rs.getInt("num");
+			}
+			if(existsUser > 0) {
+				session.setAttribute("add_user_status", "reject_duplicate");
+				response.sendRedirect("/le4db-sample/add_user_input");
+				try {
+					if (conn != null) {
+						conn.close();
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				return;
+			}
+
+			PreparedStatement st = conn.prepareStatement("INSERT INTO user VALUES(?, ?, ?, ?)");
+			st.setString(1, mailAddress);
+			st.setString(2, userName);
+			st.setString(3, userAddress);
+			st.setString(4, password);
+			st.executeUpdate();
 
 			
-			String clerkName = "";
-			ResultSet rs = stmt.executeQuery("SELECT clerkname FROM clerk WHERE eid = " + eid);
-			while (rs.next()) {
-				clerkName = rs.getString("clerkname");
-			}
-			rs.close();
-
-			out.println("<h3>" + clerkName + " さん</h3>");
-			out.println("<a href=\"shoplist\">店舗一覧</a>");
-			out.println("<br>");
-			out.println("<a href=\"add_user_input\">ユーザ登録</a>");
-
 		} catch (Exception e) {
 			e.printStackTrace();
+
 		} finally {
 			try {
 				if (conn != null) {
@@ -79,8 +101,11 @@ public class ClerkServlet extends HttpServlet {
 			}
 		}
 
-		out.println("</body>");
-		out.println("</html>");
+		session.setAttribute("add_user_status", "accept");
+		response.sendRedirect("/le4db-sample/add_user_input?mail=" + mailAddress
+                                      + "&username=" + URLEncoder.encode(userName, "UTF-8")
+                                      + "&useraddress=" + URLEncoder.encode(userAddress, "UTF-8"));
+
 	}
 
 	protected void doPost(HttpServletRequest request,
@@ -90,5 +115,4 @@ public class ClerkServlet extends HttpServlet {
 
 	public void destroy() {
 	}
-
 }

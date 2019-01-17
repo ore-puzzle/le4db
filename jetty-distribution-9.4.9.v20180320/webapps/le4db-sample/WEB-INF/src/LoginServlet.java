@@ -36,7 +36,7 @@ public class LoginServlet extends HttpServlet {
                 Object status = session.getAttribute("login_status");
 
                 if(status != null) {
-                	out.println("<h4>メールアドレスかパスワードが間違っています</h4>");
+                	out.println("<h4><font color=\"red\">メールアドレスかパスワードが間違っています</font></h4>");
 
                         session.removeAttribute("login_status");
                 }

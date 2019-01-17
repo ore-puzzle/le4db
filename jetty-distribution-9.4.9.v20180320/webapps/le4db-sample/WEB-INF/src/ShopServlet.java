@@ -64,7 +64,8 @@ public class ShopServlet extends HttpServlet {
 			session.setAttribute("filter", filter);
 		}
 
-		Object status = session.getAttribute("return_status");		
+		Object returnStatus = session.getAttribute("return_status");
+		Object addStatus = session.getAttribute("add_rental_status");
 
 		String usedAddressStr = "";
 		String searchStr = "";
@@ -90,9 +91,18 @@ public class ShopServlet extends HttpServlet {
 		}
 
 		String returnStr = "";
-		if(status != null) {
-			returnStr = "<h3><font color=\"red\">返却しました</font></h3><br>";
+		if(returnStatus != null) {
+			returnStr = "<h3><font color=\"red\">返却しました</font></h3>";
 			session.removeAttribute("return_status");
+		}
+
+		String addStr = "";
+		if(addStatus != null) {
+			addStr = "<table border=\"1\"><th>メールアドレス</th><th>mid</th><th>料金</th><th>貸出日</th><th>返却日</th>\n"
+                                 + "<tr><td>" + request.getParameter("mail") + "</td><td>" + request.getParameter("mid")
+                                 + "</td><td>" + request.getParameter("fee") + "</td><td>" + request.getParameter("rental_date")
+                                 + "</td><td>" + request.getParameter("return_date") + "</td></tr></table>\n"
+                                 + "を追加しました<br><br>";
 		}
 
 		out.println("<html>");
@@ -100,6 +110,7 @@ public class ShopServlet extends HttpServlet {
 		out.println("<h3>" + shopName);
 		out.println("<br><br>");
 		out.println("貸出状況</h3>");
+		out.println(addStr);
 		out.println(returnStr);
 		out.println("<a href=\"add_rental_input\"> 追加する</a>");
 		out.println("<br>");
@@ -119,9 +130,6 @@ public class ShopServlet extends HttpServlet {
                 out.println("<input type=\"submit\" value=\"適用\"/>");
 		out.println("</form>");
 
-		out.println("SELECT * FROM rent NATURAL INNER JOIN store WHERE mid = (SELECT mid FROM put WHERE shopname = '"
-			                                 + shopName +  "' and shopaddress = '" + shopAddress + "'" + filter + ")" 
-                                                         + searchStr + "ORDER BY return_date DESC");
 
 		Connection conn = null;
 		Statement stmt = null;
@@ -176,7 +184,7 @@ public class ShopServlet extends HttpServlet {
 		}
 		
 		out.println("<br>");
-		out.println("<a href=\"clerk\">前のページに戻る<a>");
+		out.println("<a href=\"shoplist\">前のページに戻る</a>");
 
 		out.println("</body>");
 		out.println("</html>");
