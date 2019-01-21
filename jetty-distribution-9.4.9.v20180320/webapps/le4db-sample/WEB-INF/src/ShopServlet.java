@@ -80,9 +80,8 @@ public class ShopServlet extends HttpServlet {
 		case "no":
 			filter = "";
 			selectNo = "selected";
-			selectRentalOnly = "";
 			break;
-		case "rentalonly":
+		case "rental_only":
 			filter = " and finished = 'no'";
 			selectRentalOnly = "selected";
 			break;
@@ -117,7 +116,7 @@ public class ShopServlet extends HttpServlet {
 		out.println(usedAddressStr);
 		out.println("<form action=\"shop\" method=\"GET\">");
                 out.println("メールアドレスで検索: ");
-                out.println("<input type=\"text\" name=\"search_mail\" value=\"ishikawa@example.jp\"/>");
+                out.println("<input type=\"text\" name=\"search_mail\"/>");
 		out.println("<input type=\"submit\" value=\"検索\"/>");
                 out.println("<br>");
 		out.println("<form action=\"shop\" method=\"GET\">");
@@ -125,9 +124,9 @@ public class ShopServlet extends HttpServlet {
 		out.println("<br>");
 		out.println("<select name =\"filter\">");
 		out.println("<option value=\"no\" " + selectNo + ">なし</option>");
-		out.println("<option value=\"rentalonly\" " + selectRentalOnly + ">貸出中のみ</option>");
+		out.println("<option value=\"rental_only\" " + selectRentalOnly + ">貸出中のみ</option>");
 		out.println("</select>");
-                out.println("<input type=\"submit\" value=\"適用\"/>");
+		out.println("<input type=\"submit\" value=\"適用\"/>");
 		out.println("</form>");
 
 
@@ -140,7 +139,7 @@ public class ShopServlet extends HttpServlet {
 			stmt = conn.createStatement();
 
 			out.println("<table border=\"1\">");
-			out.println("<tr><th>メールアドレス</th><th>mid</th><th>タイトル</th><th>貸出日</th><th>返却日</th><th>状態</th><th>返却</th></tr>");
+			out.println("<tr><th>メールアドレス</th><th>mid</th><th>タイトル</th><th>貸出日</th><th>返却日</th><th>状態</th><th></th></tr>");
 			
 			ResultSet rs = stmt.executeQuery("SELECT * FROM rent NATURAL INNER JOIN store WHERE mid = (SELECT mid FROM put WHERE shopname = '"
 			                                 + shopName +  "' and shopaddress = '" + shopAddress + "'" + filter + ")" 

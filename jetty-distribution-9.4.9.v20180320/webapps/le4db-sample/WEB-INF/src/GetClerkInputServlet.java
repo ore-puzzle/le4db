@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("serial")
-public class AddUserInputServlet extends HttpServlet {
+public class GetClerkInputServlet extends HttpServlet {
 
 	private String _dbname = null;
 
@@ -41,27 +41,30 @@ public class AddUserInputServlet extends HttpServlet {
 
 		HttpSession session = request.getSession(true);
 
-		String status = (String)session.getAttribute("add_user_status");
+		String status = (String)session.getAttribute("get_clerk_status");
 
 		String errorMessage = "";
 		String addStr = "";
 		if(status != null) {
 			switch(status) {
-			case "reject_not_address":
-				errorMessage = "メールアドレスが適切ではありません";
+			case "reject_empty":
+				errorMessage = "すべての情報を入力してください";
 				break;
-			case "reject_duplicate":
-				errorMessage = "すでに登録されているメールアドレスです";
+			case "reject_not_number":
+				errorMessage = "eidは数字で入力してください";
+				break;
+			case "reject_not_found":
+				errorMessage = "そのような店員は存在しません";
 				break;
 			case "accept":
-				addStr = "<table border=\"1\"><th>メールアドレス</th><th>名前</th><th>住所</th>\n"
-                                 + "<tr><td>" + request.getParameter("mail") + "</td><td>" + request.getParameter("username")
-                                 + "</td><td>" + request.getParameter("useraddress") + "</td></tr></table>\n"
+				addStr = "<table border=\"1\"><th>eid</th>\n"
+                                 + "<tr><td>" + request.getParameter("eid")
+                                 + "</td></tr></table>\n"
                                  + "を登録しました<br><br>";
 			default:
 
 			}
-			session.removeAttribute("add_user_status");
+			session.removeAttribute("get_clerk_status");
 		}
 
 		
@@ -69,31 +72,32 @@ public class AddUserInputServlet extends HttpServlet {
 		out.println("<html>");
 		out.println("<body>");
 		
-		out.println("<h3>ユーザ登録</h3>");
+		out.println("<h3>店員追加</h3>");
 
 		out.println("<h4><font color=\"red\">" + errorMessage + "</font></h4>");
 
 		out.println(addStr);
 
-		out.println("<form action=\"add_user\" method=\"GET\">");
-		out.println("メールアドレス: ");
-		out.println("<input type=\"text\" name=\"mail\"/>");
+		out.println("<form action=\"get_clerk\" method=\"GET\">");
+		out.println("eid: ");
+		out.println("<input type=\"text\" name=\"eid\"/>");
 		out.println("<br>");
-		out.println("名前: ");
-		out.println("<input type=\"text\" name=\"username\"/>");
+		out.println("通勤手段: ");
+		out.println("<input type=\"checkbox\" name=\"commute_method\" value=\"walk\">徒歩</input>");
+		out.println("<input type=\"checkbox\" name=\"commute_method\" value=\"bicycle\">自転車</input>");
+		out.println("<input type=\"checkbox\" name=\"commute_method\" value=\"car\">車</input>");
+		out.println("<input type=\"checkbox\" name=\"commute_method\" value=\"bus\">バス</input>");
+		out.println("<input type=\"checkbox\" name=\"commute_method\" value=\"train\">電車</input>");
 		out.println("<br>");
-		out.println("住所: ");
-		out.println("<input type=\"text\" name=\"useraddress\"/>");
+		out.println("店の良いところ: ");
+		out.println("<input type=\"text\" name=\"good_point\"/>");
 		out.println("<br>");
-		out.println("パスワード: ");
-		out.println("<input type=\"password\" name=\"password\"/>");
-		out.println("<br>");
-		out.println("<input type=\"submit\" value=\"登録\"/>");
+		out.println("<input type=\"submit\" value=\"追加\"/>");
 		out.println("</form>");
 
 
 		out.println("<br/>");
-		out.println("<a href=\"clerk\">前のページに戻る</a>");
+		out.println("<a href=\"clerklist\">前のページに戻る</a>");
 
 		out.println("</body>");
 		out.println("</html>");

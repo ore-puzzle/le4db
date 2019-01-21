@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("serial")
-public class SupervisorServlet extends HttpServlet {
+public class AddClerkInputServlet extends HttpServlet {
 
 	private String _dbname = null;
 
@@ -38,21 +38,53 @@ public class SupervisorServlet extends HttpServlet {
 
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
-		
+
 		HttpSession session = request.getSession(true);
+
+		String status = (String)session.getAttribute("add_clerk_status");
+
+		String errorMessage = "";
+		String addStr = "";
+		if(status != null) {
+			switch(status) {
+			case "reject_empty":
+				errorMessage = "名前とパスワードを入力してください";
+				break;
+			case "accept":
+				addStr = "<table border=\"1\"><th>eid</th><th>名前</th>\n"
+                                 + "<tr><td>" + request.getParameter("eid") + "</td><td>" + request.getParameter("clerkname")
+                                 + "</td></tr></table>\n"
+                                 + "を登録しました<br><br>";
+			default:
+
+			}
+			session.removeAttribute("add_clerk_status");
+		}
+
 		
-		session.removeAttribute("order");
 
 		out.println("<html>");
 		out.println("<body>");
+		
+		out.println("<h3>店員登録</h3>");
 
-		out.println("<h3>管理者ページ</h3>");
+		out.println("<h4><font color=\"red\">" + errorMessage + "</font></h4>");
 
-		out.println("<a href=\"add_clerk_input\">店員の登録</a>");
-		out.println("<br><br>");
-		out.println("<a href=\"add_media_input\">メディアの登録</a>");
-		out.println("<br><br>");
-		out.println("<a href=\"shoplist_sv\">店の管理</a>");
+		out.println(addStr);
+
+		out.println("<form action=\"add_clerk\" method=\"GET\">");
+		out.println("名前: ");
+		out.println("<input type=\"text\" name=\"clerkname\"/>");
+		out.println("<br>");
+		out.println("パスワード: ");
+		out.println("<input type=\"password\" name=\"password\"/>");
+		out.println("<br>");
+		out.println("<input type=\"submit\" value=\"追加\"/>");
+		out.println("</form>");
+
+
+		out.println("<br/>");
+		out.println("<a href=\"supervisor\">前のページに戻る</a>");
 
 		out.println("</body>");
 		out.println("</html>");

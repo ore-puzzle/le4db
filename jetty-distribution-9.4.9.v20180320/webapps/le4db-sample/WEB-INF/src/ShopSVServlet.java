@@ -1,6 +1,7 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -15,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("serial")
-public class SupervisorServlet extends HttpServlet {
+public class ShopSVServlet extends HttpServlet {
 
 	private String _dbname = null;
 
@@ -38,21 +39,29 @@ public class SupervisorServlet extends HttpServlet {
 
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
-		
+
 		HttpSession session = request.getSession(true);
 		
-		session.removeAttribute("order");
+		String shopName = (String)session.getAttribute("shopname");
+		String shopAddress = (String)session.getAttribute("shopaddress");
+		if(shopName == null) {
+			shopName = request.getParameter("shopname");
+			shopAddress = request.getParameter("shopaddress");
+			session.setAttribute("shopname", shopName);
+			session.setAttribute("shopaddress", shopAddress);
+		}
+
+		session.setAttribute("order", "eid");
 
 		out.println("<html>");
 		out.println("<body>");
+		out.println("<h3>" + shopName + "</h3>");
+		out.println("<a href=\"clerklist\">店員一覧</a>");
+		out.println("<a href=\"medialist\">メディア一覧</a>");
 
-		out.println("<h3>管理者ページ</h3>");
-
-		out.println("<a href=\"add_clerk_input\">店員の登録</a>");
-		out.println("<br><br>");
-		out.println("<a href=\"add_media_input\">メディアの登録</a>");
-		out.println("<br><br>");
-		out.println("<a href=\"shoplist_sv\">店の管理</a>");
+		
+		out.println("<br>");
+		out.println("<a href=\"shoplist_sv\">前のページに戻る</a>");
 
 		out.println("</body>");
 		out.println("</html>");
@@ -65,5 +74,4 @@ public class SupervisorServlet extends HttpServlet {
 
 	public void destroy() {
 	}
-
 }

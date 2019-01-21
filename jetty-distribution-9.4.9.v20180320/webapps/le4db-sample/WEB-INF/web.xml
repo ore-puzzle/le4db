@@ -99,6 +99,86 @@
     <servlet-name>ShopListSV</servlet-name>
     <servlet-class>ShopListSVServlet</servlet-class>
   </servlet>
+  
+  <servlet>
+    <servlet-name>ShopSV</servlet-name>
+    <servlet-class>ShopSVServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>DeleteShop</servlet-name>
+    <servlet-class>DeleteShopServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>AddShopInput</servlet-name>
+    <servlet-class>AddShopInputServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>AddShop</servlet-name>
+    <servlet-class>AddShopServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>AddClerkInput</servlet-name>
+    <servlet-class>AddClerkInputServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>AddClerk</servlet-name>
+    <servlet-class>AddClerkServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>GetClerk</servlet-name>
+    <servlet-class>GetClerkServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>GetClerkInput</servlet-name>
+    <servlet-class>GetClerkInputServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>RemoveClerk</servlet-name>
+    <servlet-class>RemoveClerkServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>ClerkList</servlet-name>
+    <servlet-class>ClerkListServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>MediaList</servlet-name>
+    <servlet-class>MediaListServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>AddMediaInput</servlet-name>
+    <servlet-class>AddMediaInputServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>AddMedia</servlet-name>
+    <servlet-class>AddMediaServlet</servlet-class>
+  </servlet>
+ 
+ <servlet>
+    <servlet-name>GetMediaInput</servlet-name>
+    <servlet-class>GetMediaInputServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>GetMedia</servlet-name>
+    <servlet-class>GetMediaServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>RemoveMedia</servlet-name>
+    <servlet-class>RemoveMediaServlet</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>List</servlet-name>
@@ -188,6 +268,86 @@
   <servlet-mapping>
     <servlet-name>ShopListSV</servlet-name>
     <url-pattern>/shoplist_sv</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>ShopSV</servlet-name>
+    <url-pattern>/shop_sv</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>DeleteShop</servlet-name>
+    <url-pattern>/delete_shop</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>AddShopInput</servlet-name>
+    <url-pattern>/add_shop_input</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>AddShop</servlet-name>
+    <url-pattern>/add_shop</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>AddClerkInput</servlet-name>
+    <url-pattern>/add_clerk_input</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>AddClerk</servlet-name>
+    <url-pattern>/add_clerk</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>GetClerk</servlet-name>
+    <url-pattern>/get_clerk</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>GetClerkInput</servlet-name>
+    <url-pattern>/get_clerk_input</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>RemoveClerk</servlet-name>
+    <url-pattern>/remove_clerk</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>ClerkList</servlet-name>
+    <url-pattern>/clerklist</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>MediaList</servlet-name>
+    <url-pattern>/medialist</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>AddMediaInput</servlet-name>
+    <url-pattern>/add_media_input</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>AddMedia</servlet-name>
+    <url-pattern>/add_media</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>GetMediaInput</servlet-name>
+    <url-pattern>/get_media_input</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>GetMedia</servlet-name>
+    <url-pattern>/get_media</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>RemoveMedia</servlet-name>
+    <url-pattern>/remove_media</url-pattern>
   </servlet-mapping>
 
 </web-app>

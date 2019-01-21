@@ -1,14 +1,16 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.util.Properties;
+import java.util.Calendar;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpSession;
@@ -16,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("serial")
-public class BranchServlet extends HttpServlet {
+public class AddShopServlet extends HttpServlet {
 
 	private String _dbname = null;
 
@@ -40,19 +42,18 @@ public class BranchServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 
-		String identifier = request.getParameter("identifier");
-		String password = request.getParameter("password");
+		HttpSession session = request.getSession(true);
 
-                HttpSession session = request.getSession(true);
+		String shopName = request.getParameter("shopname");
+		String shopAddress = request.getParameter("shopaddress");
 		
-		int eid = -1;
-		boolean isClerk = true;
-		try {
-			eid = Integer.parseInt(identifier);
-		} catch(NumberFormatException e) {
-			isClerk = false;
+		if(shopName == null || shopAddress == null || shopName.length() == 0 || shopAddress.length() == 0) {
+			session.setAttribute("add_shop_status", "reject_empty");
+			response.sendRedirect("/le4db-sample/add_shop_input");
+			return;
 		}
-
+		
+		
 		Connection conn = null;
 		Statement stmt = null;
 		try {
@@ -61,34 +62,31 @@ public class BranchServlet extends HttpServlet {
 			conn = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
 			stmt = conn.createStatement();
 
-			if(identifier.equals("supervisor")) {
-				if(password.equals("svpw")) {
-                    session.setAttribute("identifier", "supervisor");
-					response.sendRedirect("/le4db-sample/supervisor");
-				} else {
-					session.setAttribute("login_status", "reject");
-					response.sendRedirect("/le4db-sample/login");
-				}
-			} else if (isClerk) {
-				ResultSet rs = stmt.executeQuery("SELECT clerkpw FROM clerk WHERE eid = " + eid);
-				if(rs.next() && password.equals(rs.getString("clerkpw"))) {
-                    session.setAttribute("identifier", eid);
-					response.sendRedirect("/le4db-sample/clerk");
-				} else {
-					session.setAttribute("login_status", "reject");
-					response.sendRedirect("/le4db-sample/login");
-				}				
-				rs.close();				
-			} else {
-				ResultSet rs = stmt.executeQuery("SELECT userpw FROM user WHERE mail = '" + identifier + "'");
-				if(rs.next() && password.equals(rs.getString("userpw"))) {
-					response.sendRedirect("/le4db-sample/user");
-				} else {
-					session.setAttribute("login_status", "reject");
-					response.sendRedirect("/le4db-sample/login");
-				}				
-				rs.close();				
+			int existsShop = -1;
+			ResultSet rs = stmt.executeQuery("SELECT count(*) AS num FROM shop WHERE shopname ='" + shopName
+			                                   + "' and shopaddress = '" + shopAddress + "'");
+			while (rs.next()) {
+				existsShop = rs.getInt("num");
 			}
+			if(existsShop > 0) {
+				session.setAttribute("add_shop_status", "reject_duplicate");
+				response.sendRedirect("/le4db-sample/add_shop_input");
+				try {
+					if (conn != null) {
+						conn.close();
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				return;
+			}
+			
+			PreparedStatement st = conn.prepareStatement("INSERT INTO shop VALUES(?, ?, ?)");
+			st.setString(1, shopName);
+			st.setString(2, shopAddress);
+			st.setInt(3, 1);
+			st.executeUpdate();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -101,6 +99,10 @@ public class BranchServlet extends HttpServlet {
 			}
 		}
 
+		session.setAttribute("add_shop_status", "accept");
+		response.sendRedirect("/le4db-sample/add_shop_input?shopname=" + URLEncoder.encode(shopName, "UTF-8")
+		                      + "&shopaddress=" + URLEncoder.encode(shopAddress, "UTF-8"));
+
 	}
 
 	protected void doPost(HttpServletRequest request,
@@ -110,5 +112,4 @@ public class BranchServlet extends HttpServlet {
 
 	public void destroy() {
 	}
-
 }

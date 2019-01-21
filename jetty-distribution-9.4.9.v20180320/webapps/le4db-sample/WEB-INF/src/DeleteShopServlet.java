@@ -1,6 +1,7 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -16,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("serial")
-public class ReturnServlet extends HttpServlet {
+public class DeleteShopServlet extends HttpServlet {
 
 	private String _dbname = null;
 
@@ -40,28 +41,53 @@ public class ReturnServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		
-                HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(true);
 
-		String mailAddress = request.getParameter("mail");
-		int mid = Integer.parseInt(request.getParameter("mid"));
+		String shopName = request.getParameter("shopname");
+		String shopAddress = request.getParameter("shopaddress");
 
 		Connection conn = null;
+		Statement stmt = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
                         String dbfile = getServletContext().getRealPath("WEB-INF/" + _dbname);
 			conn = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
+			stmt = conn.createStatement();
+			
+			ResultSet rs = stmt.executeQuery("SELECT count(*) AS num FROM shop WHERE shopname = '" + shopName
+			                                  + "' and shopaddress = '" + shopAddress + "'");
+			int existsShop = -1;
+			while(rs.next()) {
+				existsShop = rs.getInt("num");
+			}
+			if(existsShop == 0) {
+				session.setAttribute("delete_shop_status", "reject");
+				response.sendRedirect("/le4db-sample/shoplist_sv");
+				return;
+			}
 
-			PreparedStatement st1 = conn.prepareStatement("UPDATE rent SET finished = 'yes' WHERE mail = ? and mid = ?");
-			st1.setString(1, mailAddress);
-			st1.setInt(2, mid);
+			PreparedStatement st1 = conn.prepareStatement("DELETE FROM shop WHERE shopname = ? and shopaddress = ?");
+			st1.setString(1, shopName);
+			st1.setString(2, shopAddress);
 			st1.executeUpdate();
 			
-			PreparedStatement st2 = conn.prepareStatement("UPDATE media SET available = 'yes' WHERE mid = ?");
-			st2.setInt(1, mid);
+			PreparedStatement st2 = conn.prepareStatement("DELETE FROM put WHERE shopname = ? and shopaddress = ?");
+			st2.setString(1, shopName);
+			st2.setString(2, shopAddress);
 			st2.executeUpdate();
+			
+			PreparedStatement st3 = conn.prepareStatement("DELETE FROM work1 WHERE shopname = ? and shopaddress = ?");
+			st3.setString(1, shopName);
+			st3.setString(2, shopAddress);
+			st3.executeUpdate();
+			
+			PreparedStatement st4 = conn.prepareStatement("DELETE FROM work2 WHERE shopname = ? and shopaddress = ?");
+			st4.setString(1, shopName);
+			st4.setString(2, shopAddress);
+			st4.executeUpdate();
 
-			session.setAttribute("return_status", "returned");
-			response.sendRedirect("/le4db-sample/shop");
+			response.sendRedirect("/le4db-sample/shoplist_sv?delete_shopname=" + URLEncoder.encode(shopName, "UTF-8")
+				                  + "&delete_shopaddress=" + URLEncoder.encode(shopAddress, "UTF-8"));
 
 		} catch (Exception e) {
 			e.printStackTrace();

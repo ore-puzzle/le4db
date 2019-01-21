@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("serial")
-public class ShopListSVServlet extends HttpServlet {
+public class ShopListUSServlet extends HttpServlet {
 
 	private String _dbname = null;
 
@@ -45,8 +45,6 @@ public class ShopListSVServlet extends HttpServlet {
 		session.removeAttribute("shopname");
 		session.removeAttribute("shopaddress");
 		
-		String deleteShopName = request.getParameter("delete_shopname");
-		String deleteShopAddress = request.getParameter("delete_shopaddress");
 		String searchShopName = request.getParameter("search_shopname");
 		String searchShopAddress = request.getParameter("search_shopaddress");
 
@@ -54,48 +52,69 @@ public class ShopListSVServlet extends HttpServlet {
 		String usedAddressStr = "";
 		String searchNameStr = "";
 		String searchAddressStr = "";
-		String valueNameStr = "";
-		String valueAddressStr = "";
 		if(searchShopName != null && !searchShopName.equals("")) {
-			usedNameStr = "検索した店舗名: " + searchShopName + "<br>";
+			session.setAttribute("search_shopname", searchShopName);
+		} else {
+			searchShopName = session.getAttribute("search_shopname");
+		}		
+		if(searchShopName != null && !searchShopName.equals("")) {
 			searchNameStr = " and shopname LIKE '%" + searchShopName + "%'";
-			valueNameStr = " value=\"" + searchShopName + "\"";
+		} else {
+			searchShopName = "";
+		}
+		
+		if(searchShopAddress != null && !searchShopAddress.equals("")) {
+			session.setAttribute("search_address", searchAddress);
+		} else {
+			searchAddress = session.getAttribute("search_address");
 		}
 		if(searchShopAddress != null && !searchShopAddress.equals("")) {
-			usedAddressStr = "検索した住所: " + searchShopAddress + "<br>";
 			searchAddressStr = " and shopaddress LIKE '%" + searchShopAddress + "%'";
-			valueAddressStr = " value=\"" + searchShopAddress + "\"";
+		} else {
+			searchShopName = "";
 		}
-
-
-		String deleteStr = "";
-		if(deleteShopName != null) {
-			deleteStr = "<table border=\"1\"><tr><th>店舗名</th><th>住所</th></tr>\n"
-				        + "<tr><td>" + deleteShopName + "</td><td>" + deleteShopAddress + "</td></tr></table>\n"
-				        + "を削除しました<br><br>";
+		
+		String order = request.getParameter("order");
+		if(order == null) {
+			order = (String)session.getAttribute("order");
+		} else {
+			session.setAttribute("order", order);
+		}
+		
+		String selectAlphabet = "";
+		String selectNum = "";
+		switch(order) {
+		case "alphabet":
+			order = "shopname";
+			selectAlphabet = "selected";
+			break;
+		case "total_num":
+			order = "total_media";
+			selectNum = "selected";
+			break;
+		default:
+			order = "alphabet";
 		}
 
 		out.println("<html>");
 		out.println("<body>");
-		out.println("<h3>店舗一覧</h3>");
-		out.println(deleteStr);
-		out.println("<a href=\"add_shop_input\">追加する</a><br><br>");
+		out.println("<h3>店舗検索結果</h3>");
+		out.println("検索した店舗名： " + searchShopName);
+		out.println("<br>");
+		out.println("検索した住所： " + searchAddress);
+		out.println("<br><br>");
+		out.println("ソート： ");
+		out.println("<select name =\"order\">");
+		out.println("<option value=\"alphabet\" " + selectAlphabet + ">五十音順</option>");
+		out.println("<option value=\"total_num\" " + selectNum + ">総所持数順</option>");
+		out.println("</select>");
+		out.println("<input type=\"submit\" value=\"適用\"/>");
 		out.println(usedNameStr);
 		out.println(usedAddressStr);
 		
 		if(usedNameStr.length() + usedAddressStr.length() != 0) {
 			out.println("<br>");
 		}
-
-		out.println("<form action=\"shoplist_sv\" method=\"GET\">");
-		out.println("店舗名で検索: ");
-		out.println("<input type=\"text\" name=\"search_shopname\"" + valueNameStr + "/>");
-		out.println("<br>");
-		out.println("住所で検索: ");
-		out.println("<input type=\"text\" name=\"search_shopaddress\"" + valueAddressStr + "/>");
-		out.println("<input type=\"submit\" value=\"検索\"/>");
-		out.println("</form>");
-		out.println("<br>");
 
 
 		Connection conn = null;
@@ -107,20 +126,21 @@ public class ShopListSVServlet extends HttpServlet {
 			stmt = conn.createStatement();
 
 			out.println("<table border=\"1\">");
-			out.println("<tr><th>店舗名</th><th>住所</th><th></th></tr>");
+			out.println("<tr><th>店舗名</th><th>住所</th><th>総所持数</th></tr>");
 			
-			ResultSet rs = stmt.executeQuery("SELECT shopname, shopaddress FROM shop WHERE 1 = 1"
-                                                         + searchNameStr + searchAddressStr + " ORDER BY shopname DESC");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM shop WHERE 1 = 1"
+                                                         + searchNameStr + searchAddressStr + " ORDER BY " + order + " DESC");
 			while (rs.next()) {
 				String shopName = rs.getString("shopname");
 				String shopAddress = rs.getString("shopaddress");
+				int totalMedia = rs.getInt("total_media");
 
 				out.println("<tr>");
-				out.println("<td><a href=\"clerklist?shopname=" + URLEncoder.encode(shopName, "UTF-8")
-                                            + "&shopaddress=" + URLEncoder.encode(shopAddress, "UTF-8") + "\">" + shopName + "</a></td>");
+				out.println("<td><a href=\"medialist_in_shop?shopname=" + URLEncoder.encode(shopName, "UTF-8")
+                                            + "&shopaddress=" + URLEncoder.encode(shopAddress, "UTF-8") + "\">" + shopName
+                                            + "&formerURL=shoplist_us</a></td>");
 				out.println("<td>" + shopAddress + "</td>");
-				out.println("<td><a href=\"delete_shop?shopname=" + URLEncoder.encode(shopName, "UTF-8")
-				                            + "&shopaddress=" + URLEncoder.encode(shopAddress, "UTF-8") + "\">削除</a></td>");
+				out.println("<td>" + totalMedia + "</td>");
 				out.println("</tr>");
 			}
 			rs.close();
@@ -140,7 +160,7 @@ public class ShopListSVServlet extends HttpServlet {
 		}
 		
 		out.println("<br>");
-		out.println("<a href=\"supervisor\">前のページに戻る</a>");
+		out.println("<a href=\"user\">前のページに戻る</a>");
 
 		out.println("</body>");
 		out.println("</html>");
