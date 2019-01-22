@@ -40,12 +40,13 @@ public class MediaServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		
-        HttpSession session = request.getSession(true);
-		String title = (String)session.getAttribute("title");
-		int publishedYear = (Integer)session.getAttribute("published_year");
-		String publisher = (String)session.getAttribute("publisher");
-		String length = (String)session.getAttribute("length");
-		String genre = (String)session.getAttribute("genre");
+       		HttpSession session = request.getSession(true);
+
+		String title = request.getParameter("title");
+		int publishedYear = Integer.parseInt(request.getParameter("published_year"));
+		String publisher = request.getParameter("publisher");
+		String length = request.getParameter("length");
+		String genre = request.getParameter("genre");
 
 		out.println("<html>");
 		out.println("<body>");
@@ -72,7 +73,7 @@ public class MediaServlet extends HttpServlet {
 			out.println("<table border=\"1\"><tr><th>置いてある店舗名</th><th>住所</th><th>媒体</th></tr>");
 			
 			ResultSet rs = stmt.executeQuery("SELECT shopname, shopaddress, type FROM (media NATURAL INNER JOIN put) NATURAL INNER JOIN store "
-			                                 + "WHERE title = '" + title + "' and published_year = " + published_year);
+			                                 + "WHERE title = '" + title + "' and published_year = " + publishedYear + " ORDER BY shopname ASC");
 			while (rs.next()) {
 				String shopName = rs.getString("shopname");
 				String shopAddress = rs.getString("shopaddress");

@@ -79,7 +79,7 @@ public class GetMediaInputServlet extends HttpServlet {
 
 		out.println(addStr);
 
-		out.println("<form action=\"get_clerk\" method=\"GET\">");
+		out.println("<form action=\"get_media\" method=\"GET\">");
 		out.println("mid: ");
 		out.println("<input type=\"text\" name=\"mid\"/>");
 		out.println("<br>");

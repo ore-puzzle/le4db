@@ -102,6 +102,8 @@ public class ShopServlet extends HttpServlet {
                                  + "</td><td>" + request.getParameter("fee") + "</td><td>" + request.getParameter("rental_date")
                                  + "</td><td>" + request.getParameter("return_date") + "</td></tr></table>\n"
                                  + "を追加しました<br><br>";
+
+			session.removeAttribute("add_rental_status");
 		}
 
 		out.println("<html>");
@@ -139,7 +141,7 @@ public class ShopServlet extends HttpServlet {
 			stmt = conn.createStatement();
 
 			out.println("<table border=\"1\">");
-			out.println("<tr><th>メールアドレス</th><th>mid</th><th>タイトル</th><th>貸出日</th><th>返却日</th><th>状態</th><th></th></tr>");
+			out.println("<tr><th>メールアドレス</th><th>mid</th><th>タイトル</th><th>貸出日</th><th>返却日</th><th>状態</th></tr>");
 			
 			ResultSet rs = stmt.executeQuery("SELECT * FROM rent NATURAL INNER JOIN store WHERE mid = (SELECT mid FROM put WHERE shopname = '"
 			                                 + shopName +  "' and shopaddress = '" + shopAddress + "'" + filter + ")" 

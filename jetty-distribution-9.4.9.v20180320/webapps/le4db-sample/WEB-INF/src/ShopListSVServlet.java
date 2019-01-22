@@ -116,7 +116,7 @@ public class ShopListSVServlet extends HttpServlet {
 				String shopAddress = rs.getString("shopaddress");
 
 				out.println("<tr>");
-				out.println("<td><a href=\"clerklist?shopname=" + URLEncoder.encode(shopName, "UTF-8")
+				out.println("<td><a href=\"shop_sv?shopname=" + URLEncoder.encode(shopName, "UTF-8")
                                             + "&shopaddress=" + URLEncoder.encode(shopAddress, "UTF-8") + "\">" + shopName + "</a></td>");
 				out.println("<td>" + shopAddress + "</td>");
 				out.println("<td><a href=\"delete_shop?shopname=" + URLEncoder.encode(shopName, "UTF-8")

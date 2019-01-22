@@ -58,7 +58,7 @@ public class AddMediaInputServlet extends HttpServlet {
 				break;
 			case "accept":
 				addStr = "<table border=\"1\"><th>mid</th><th>タイトル</th><th>出版年</th>\n"
-                                 + "<tr><td>" + request.getParameter("eid") + "</td><td>" + request.getParameter("title")
+                                 + "<tr><td>" + request.getParameter("mid") + "</td><td>" + request.getParameter("title")
                                  + "</td><td>" + request.getParameter("published_year") + "</td></tr></table>\n"
                                  + "を登録しました<br><br>";
 			default:
@@ -78,7 +78,7 @@ public class AddMediaInputServlet extends HttpServlet {
 
 		out.println(addStr);
 
-		out.println("<form action=\"add_clerk\" method=\"GET\">");
+		out.println("<form action=\"add_media\" method=\"GET\">");
 		out.println("媒体");
 		out.println("<input type=\"radio\" name=\"media\" value=\"Blu-ray\">Blu-ray</input>");
 		out.println("<input type=\"radio\" name=\"media\" value=\"DVD\">DVD</input>");
@@ -91,7 +91,7 @@ public class AddMediaInputServlet extends HttpServlet {
 		out.println("<input type=\"text\" name=\"published_year\"/>");
 		out.println("<br>");
 		out.println("出版社: ");
-		out.println("<input type=\"text\" name=\"pablisher\"/>");
+		out.println("<input type=\"text\" name=\"publisher\"/>");
 		out.println("<br>");
 		out.println("長さ: ");
 		out.println("<input type=\"text\" name=\"hour\"/>");

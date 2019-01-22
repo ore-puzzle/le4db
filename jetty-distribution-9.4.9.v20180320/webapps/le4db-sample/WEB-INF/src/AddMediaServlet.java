@@ -53,10 +53,10 @@ public class AddMediaServlet extends HttpServlet {
 		String second = request.getParameter("second");
 		String genre = request.getParameter("genre");
 		
-		if(media == null || media.length() == 0 || title == null || title.length() == 0 
-		  || publishedYear == null || publishedYear.length() == 0 || publisher == null || publisher.length() == 0 
-		  || hour == null || hour.length() == 0 || minute == null || minute.length() == 0 
-		  || second == null || second.length() == 0|| genre == null || genre.length() == 0) {
+		if(media.length() == 0 || title.length() == 0 
+		  || publishedYear.length() == 0 || publisher.length() == 0 
+		  || hour.length() == 0 || minute.length() == 0 
+		  || second.length() == 0|| genre.length() == 0) {
 			session.setAttribute("add_media_status", "reject_empty");
 			response.sendRedirect("/le4db-sample/add_media_input");
 			return;

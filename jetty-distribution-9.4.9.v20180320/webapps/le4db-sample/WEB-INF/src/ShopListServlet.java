@@ -44,6 +44,8 @@ public class ShopListServlet extends HttpServlet {
 		int eid = (Integer)session.getAttribute("identifier");
 		session.setAttribute("filter", "no");
 		session.removeAttribute("search_mail");
+		session.removeAttribute("shopname");
+		session.removeAttribute("shopaddress");
 
 		out.println("<html>");
 		out.println("<body>");

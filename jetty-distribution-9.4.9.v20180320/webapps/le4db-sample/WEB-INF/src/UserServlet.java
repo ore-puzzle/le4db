@@ -40,8 +40,12 @@ public class UserServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		
-        HttpSession session = request.getSession(true);
-		String mailAddress = (Integer)session.getAttribute("identifier");
+       		HttpSession session = request.getSession(true);
+		String mailAddress = (String)session.getAttribute("identifier");
+
+		session.setAttribute("search_shopname", "");
+		session.setAttribute("search_shopaddress", "");
+		session.setAttribute("order", "alphabet");
 
 		out.println("<html>");
 		out.println("<body>");
@@ -56,7 +60,7 @@ public class UserServlet extends HttpServlet {
 
 			
 			String userName = "";
-			ResultSet rs = stmt.executeQuery("SELECT username FROM user WHERE mail = " + mailAddress);
+			ResultSet rs = stmt.executeQuery("SELECT username FROM user WHERE mail = '" + mailAddress + "'");
 			while (rs.next()) {
 				userName = rs.getString("username");
 			}
@@ -66,21 +70,24 @@ public class UserServlet extends HttpServlet {
 			out.println("<h4>店舗検索</h4>");
 			out.println("<form action=\"shoplist_us\" method=\"GET\">");
 			out.println("店舗名で検索: ");
-			out.println("<input type=\"text\" name=\"search_shopname\"" + valueNameStr + "/>");
+			out.println("<input type=\"text\" name=\"search_shopname\"/>");
 			out.println("<br>");
 			out.println("住所で検索: ");
-			out.println("<input type=\"text\" name=\"search_shopaddress\"" + valueAddressStr + "/>");
+			out.println("<input type=\"text\" name=\"search_shopaddress\"/>");
 			out.println("<input type=\"submit\" value=\"検索\"/>");
 			out.println("</form>");
 			out.println("<h4>作品検索</h4>");
-			out.println("<form action=\"medialist_us&formerURL=user\" method=\"GET\">");
+			out.println("<form action=\"medialist_us\" method=\"GET\">");
 			out.println("タイトルで検索: ");
-			out.println("<input type=\"text\" name=\"search_title\"" + valueNameStr + "/>");
+			out.println("<input type=\"text\" name=\"search_title\"/>");
 			out.println("<br>");
 			out.println("ジャンルで検索: ");
-			out.println("<input type=\"text\" name=\"search_shopaddress\"" + valueAddressStr + "/>");
+			out.println("<input type=\"text\" name=\"search_shopaddress\"/>");
+			out.println("<input type=\"hidden\" name=\"formerURL\" value=\"user\"/>");
 			out.println("<input type=\"submit\" value=\"検索\"/>");
 			out.println("</form>");
+			out.println("<br><br>");
+			out.println("<a href=\"history?username=" + userName + "\">履歴</a>");
 
 		} catch (Exception e) {
 			e.printStackTrace();

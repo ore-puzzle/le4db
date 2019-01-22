@@ -1,12 +1,12 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.util.Properties;
 
 import javax.servlet.ServletException;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("serial")
-public class ShopSVServlet extends HttpServlet {
+public class TestServlet extends HttpServlet {
 
 	private String _dbname = null;
 
@@ -39,31 +39,27 @@ public class ShopSVServlet extends HttpServlet {
 
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
-
-		HttpSession session = request.getSession(true);
-
 		
-		String shopName = (String)session.getAttribute("shopname");
-		String shopAddress = (String)session.getAttribute("shopaddress");
-		if(shopName == null) {
-			shopName = request.getParameter("shopname");
-			shopAddress = request.getParameter("shopaddress");
-			session.setAttribute("shopname", shopName);
-			session.setAttribute("shopaddress", shopAddress);
-		}
+      		HttpSession session = request.getSession(true);
 
-		session.setAttribute("order", "id");
+		String str = request.getParameter("str");
+		
 
 		out.println("<html>");
 		out.println("<body>");
-		out.println("<h3>" + shopName + "</h3>");
-		out.println("<a href=\"clerklist\">店員一覧</a>");
-		out.println("<br><br>");
-		out.println("<a href=\"medialist\">メディア一覧</a>");
 
-		
-		out.println("<br><br>");
-		out.println("<a href=\"shoplist_sv\">前のページに戻る</a>");
+		if(str == null) {
+			out.println("null!");
+		} else if(str.equals("")) {
+			out.println("empty!");
+		} else {
+			out.println("str");
+		}
+
+		out.println("<form action=\"test\" method=\"GET\">");
+		out.println("<input type=\"text\" name=\"str\"/>");
+		out.println("<input type=\"submit\" value=\"決定\"/>");
+		out.println("</form>");
 
 		out.println("</body>");
 		out.println("</html>");
@@ -76,4 +72,5 @@ public class ShopSVServlet extends HttpServlet {
 
 	public void destroy() {
 	}
+
 }

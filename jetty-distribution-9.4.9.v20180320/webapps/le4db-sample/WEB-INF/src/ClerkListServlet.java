@@ -60,17 +60,18 @@ public class ClerkListServlet extends HttpServlet {
 
 		String selectEid = "";
 		String selectAlphabet = "";
+		String orderStr = "";
 		switch(order) {
-		case "eid":
-			order = "eid";
+		case "id":
+			orderStr = "eid";
 			selectEid = "selected";
 			break;
 		case "alphabet":
-			order = "clerkname";
+			orderStr = "clerkname";
 			selectAlphabet = "selected";
 			break;
 		default:
-			order = "eid";
+			orderStr = "eid";
 		}
 		
 		String removeEid = request.getParameter("eid");
@@ -88,11 +89,11 @@ public class ClerkListServlet extends HttpServlet {
 		out.println("<h3>店員一覧</h3>");
 		out.println(removeStr);
 		out.println("<a href=\"get_clerk_input?shopname=" + shopName + "&shopaddress=" + shopAddress + "\">追加する</a><br><br>");
-		out.println("<form action=\"shop_sv\" method=\"GET\">");
+		out.println("<form action=\"clerklist\" method=\"GET\">");
 		out.println("ソート： ");
 		out.println("<br>");
 		out.println("<select name =\"order\">");
-		out.println("<option value=\"eid\" " + selectEid + ">eid順</option>");
+		out.println("<option value=\"id\" " + selectEid + ">eid順</option>");
 		out.println("<option value=\"alphabet\" " + selectAlphabet + ">五十音順</option>");
 		out.println("</select>");
 		out.println("<input type=\"submit\" value=\"適用\"/>");
@@ -111,7 +112,7 @@ public class ClerkListServlet extends HttpServlet {
 			out.println("<tr><th>eid</th><th>名前</th><th></th></tr>");
 			
 			ResultSet rs = stmt.executeQuery("SELECT DISTINCT eid, clerkname FROM clerk NATURAL INNER JOIN work1 WHERE shopname = '" + shopName
-			                                  + "' and shopaddress = '" + shopAddress + "' ORDER BY " + order + " ASC");
+			                                  + "' and shopaddress = '" + shopAddress + "' ORDER BY " + orderStr + " ASC");
 			while (rs.next()) {
 				String eid = rs.getString("eid");
 				String clerkName = rs.getString("clerkname");

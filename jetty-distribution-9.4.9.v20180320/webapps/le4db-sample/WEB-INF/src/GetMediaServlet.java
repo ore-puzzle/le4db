@@ -98,7 +98,7 @@ public class GetMediaServlet extends HttpServlet {
 			st.setString(3, shopAddress);
 			st.executeUpdate();
 			
-			ResultSet rs2 = stmt.executeQuery("SELECT title, published_year, type"
+			ResultSet rs2 = stmt.executeQuery("SELECT title, published_year, type "
 			                                  + "FROM media NATURAL INNER JOIN store WHERE mid =" + mid);
 			while(rs2.next()) {
 				title = rs2.getString("title");

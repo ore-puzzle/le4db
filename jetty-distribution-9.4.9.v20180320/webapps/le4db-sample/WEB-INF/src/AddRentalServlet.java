@@ -43,6 +43,9 @@ public class AddRentalServlet extends HttpServlet {
 
 		HttpSession session = request.getSession(true);
 
+		String shopName = (String)session.getAttribute("shopname");
+		String shopAddress = (String)session.getAttribute("shopaddress");
+
 		String mailAddress = request.getParameter("mail");
 		String mid = request.getParameter("mid");
 		String fee = request.getParameter("fee");
@@ -52,7 +55,15 @@ public class AddRentalServlet extends HttpServlet {
 		String rentalDuration = request.getParameter("rental_duration");
 
 
-		String rentalDate = rentalYear + "/" + rentalMonth + "/" + rentalDay;
+		String rentalMonthStr = String.valueOf(rentalMonth);
+		String rentalDayStr = String.valueOf(rentalDay);
+		if(rentalMonthStr.length() == 1) {
+			rentalMonthStr = "0" + rentalMonthStr;
+		}
+		if(rentalDayStr.length() == 1) {
+			rentalDayStr = "0" + rentalDayStr;
+		}
+		String rentalDate = rentalYear + "/" + rentalMonthStr + "/" + rentalDayStr;
 
 		Calendar calendar = Calendar.getInstance();
 		calendar.clear();
@@ -95,7 +106,8 @@ public class AddRentalServlet extends HttpServlet {
 				
 			}
 			int existsMedia = -1;
-			ResultSet rs2 = stmt.executeQuery("SELECT count(*) AS num FROM put WHERE mid =" + mid);
+			ResultSet rs2 = stmt.executeQuery("SELECT count(*) AS num FROM put WHERE mid =" + mid 
+                                                          + " and shopname = '" + shopName + "' and shopaddress = '" + shopAddress + "'");
 			while (rs2.next()) {
 				existsMedia = rs2.getInt("num");		
 			}

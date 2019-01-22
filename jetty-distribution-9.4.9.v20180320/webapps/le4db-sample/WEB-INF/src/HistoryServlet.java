@@ -6,9 +6,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.util.Properties;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpSession;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("serial")
-public class BranchServlet extends HttpServlet {
+public class HistoryServlet extends HttpServlet {
 
 	private String _dbname = null;
 
@@ -39,57 +39,56 @@ public class BranchServlet extends HttpServlet {
 
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
-
-		String identifier = request.getParameter("identifier");
-		String password = request.getParameter("password");
-
-                HttpSession session = request.getSession(true);
 		
-		int eid = -1;
-		boolean isClerk = true;
-		try {
-			eid = Integer.parseInt(identifier);
-		} catch(NumberFormatException e) {
-			isClerk = false;
-		}
+                HttpSession session = request.getSession(true);
+		String mailAddress = (String)session.getAttribute("identifier");
+		String userName = request.getParameter("username");
+
+		out.println("<html>");
+		out.println("<body>");
 
 		Connection conn = null;
 		Statement stmt = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
-			String dbfile = getServletContext().getRealPath("WEB-INF/" + _dbname);
+                        String dbfile = getServletContext().getRealPath("WEB-INF/" + _dbname);
 			conn = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
 			stmt = conn.createStatement();
 
-			if(identifier.equals("supervisor")) {
-				if(password.equals("svpw")) {
-                   			session.setAttribute("identifier", "supervisor");
-					response.sendRedirect("/le4db-sample/supervisor");
+			out.println("<h3>" + userName + " さん</h3>");
+			out.println("<h3>履歴</h3>");
+			out.println("<table border=\"1\">");
+			out.println("<tr><th>タイトル</th><th>貸出日</th><th>返却日</th><th></th></tr>");
+
+			String title = "";
+			String finished = "";
+			String rentalDate = "";
+			String returnDate = "";
+			ResultSet rs = stmt.executeQuery("SELECT title, finished, rental_date, return_date FROM rent NATURAL INNER JOIN store"
+                                                         + " WHERE mail = '" + mailAddress + "' ORDER BY rental_date DESC");
+			while (rs.next()) {
+				title = rs.getString("title");
+				finished = rs.getString("finished");
+				rentalDate = rs.getString("rental_date");
+				returnDate = rs.getString("return_date");
+
+				out.println("<tr>");
+				
+				out.println("<td>" + title + "</td>");
+				out.println("<td>" + rentalDate + "</td>");
+				out.println("<td>" + returnDate + "</td>");
+				if(finished.equals("yes")) {
+					out.println("<td>返却済み</td>");
 				} else {
-					session.setAttribute("login_status", "reject");
-					response.sendRedirect("/le4db-sample/login");
+					out.println("<td>未返却</td>");
 				}
-			} else if (isClerk) {
-				ResultSet rs = stmt.executeQuery("SELECT clerkpw FROM clerk WHERE eid = " + eid);
-				if(rs.next() && password.equals(rs.getString("clerkpw"))) {
-                  			session.setAttribute("identifier", eid);
-					response.sendRedirect("/le4db-sample/clerk");
-				} else {
-					session.setAttribute("login_status", "reject");
-					response.sendRedirect("/le4db-sample/login");
-				}				
-				rs.close();				
-			} else {
-				ResultSet rs = stmt.executeQuery("SELECT userpw FROM user WHERE mail = '" + identifier + "'");
-				if(rs.next() && password.equals(rs.getString("userpw"))) {
-					session.setAttribute("identifier", identifier);
-					response.sendRedirect("/le4db-sample/user");
-				} else {
-					session.setAttribute("login_status", "reject");
-					response.sendRedirect("/le4db-sample/login");
-				}				
-				rs.close();				
+				out.println("<tr>");
 			}
+			rs.close();
+
+			out.println("</table>");
+
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -102,6 +101,11 @@ public class BranchServlet extends HttpServlet {
 			}
 		}
 
+		out.println("<br>");
+		out.println("<a href=\"user\">前のページに戻る</a>");
+
+		out.println("</body>");
+		out.println("</html>");
 	}
 
 	protected void doPost(HttpServletRequest request,

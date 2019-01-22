@@ -180,6 +180,36 @@
     <servlet-class>RemoveMediaServlet</servlet-class>
   </servlet>
 
+  <servlet>
+    <servlet-name>User</servlet-name>
+    <servlet-class>UserServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>History</servlet-name>
+    <servlet-class>HistoryServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>ShopListUS</servlet-name>
+    <servlet-class>ShopListUSServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>MediaListUS</servlet-name>
+    <servlet-class>MediaListUSServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>Media</servlet-name>
+    <servlet-class>MediaServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>Test</servlet-name>
+    <servlet-class>TestServlet</servlet-class>
+  </servlet>
+
   <servlet-mapping>
     <servlet-name>List</servlet-name>
     <url-pattern>/list</url-pattern>
@@ -348,6 +378,36 @@
   <servlet-mapping>
     <servlet-name>RemoveMedia</servlet-name>
     <url-pattern>/remove_media</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>User</servlet-name>
+    <url-pattern>/user</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>History</servlet-name>
+    <url-pattern>/history</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>ShopListUS</servlet-name>
+    <url-pattern>/shoplist_us</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>MediaListUS</servlet-name>
+    <url-pattern>/medialist_us</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>Media</servlet-name>
+    <url-pattern>/media</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>Test</servlet-name>
+    <url-pattern>/test</url-pattern>
   </servlet-mapping>
 
 </web-app>

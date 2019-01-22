@@ -60,17 +60,18 @@ public class MediaListServlet extends HttpServlet {
 
 		String selectMid = "";
 		String selectAlphabet = "";
+		String orderStr = "";
 		switch(order) {
-		case "mid":
-			order = "mid";
+		case "id":
+			orderStr = "mid";
 			selectMid = "selected";
 			break;
 		case "alphabet":
-			order = "title";
+			orderStr = "title";
 			selectAlphabet = "selected";
 			break;
 		default:
-			order = "mid";
+			orderStr = "mid";
 		}
 		
 		String removeMid = request.getParameter("mid");
@@ -93,7 +94,7 @@ public class MediaListServlet extends HttpServlet {
 		out.println("ソート： ");
 		out.println("<br>");
 		out.println("<select name =\"order\">");
-		out.println("<option value=\"mid\" " + selectMid + ">mid順</option>");
+		out.println("<option value=\"id\" " + selectMid + ">mid順</option>");
 		out.println("<option value=\"alphabet\" " + selectAlphabet + ">五十音順</option>");
 		out.println("</select>");
 		out.println("<input type=\"submit\" value=\"適用\"/>");
@@ -111,8 +112,9 @@ public class MediaListServlet extends HttpServlet {
 			out.println("<table border=\"1\">");
 			out.println("<tr><th>mid</th><th>タイトル</th><th>出版年</th><th>媒体</th></tr>");
 			
-			ResultSet rs = stmt.executeQuery("SELECT DISTINCT mid, title, published_year, type FROM (media NATURAL INNER JOIN store) NATURAL INNER JOIN put"
-				                             + "WHERE shopname = '" + shopName + "' and shopaddress = '" + shopAddress + "' ORDER BY " + order + " ASC");
+			ResultSet rs = stmt.executeQuery("SELECT DISTINCT mid, title, published_year, type "
+                                                         + "FROM (media NATURAL INNER JOIN store) NATURAL INNER JOIN put "
+				                         + "WHERE shopname = '" + shopName + "' and shopaddress = '" + shopAddress + "' ORDER BY " + orderStr + " ASC");
 			while (rs.next()) {
 				String mid = rs.getString("mid");
 				String title = rs.getString("title");
