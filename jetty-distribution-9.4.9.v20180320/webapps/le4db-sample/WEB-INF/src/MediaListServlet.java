@@ -90,7 +90,7 @@ public class MediaListServlet extends HttpServlet {
 		out.println("<h3>メディア一覧</h3>");
 		out.println(removeStr);
 		out.println("<a href=\"get_media_input?shopname=" + shopName + "&shopaddress=" + shopAddress + "\">追加する</a><br><br>");
-		out.println("<form action=\"shop_sv\" method=\"GET\">");
+		out.println("<form action=\"medialist\" method=\"GET\">");
 		out.println("ソート： ");
 		out.println("<br>");
 		out.println("<select name =\"order\">");
@@ -114,7 +114,8 @@ public class MediaListServlet extends HttpServlet {
 			
 			ResultSet rs = stmt.executeQuery("SELECT DISTINCT mid, title, published_year, type "
                                                          + "FROM (media NATURAL INNER JOIN store) NATURAL INNER JOIN put "
-				                         + "WHERE shopname = '" + shopName + "' and shopaddress = '" + shopAddress + "' ORDER BY " + orderStr + " ASC");
+				                         + "WHERE shopname = '" + shopName + "' and shopaddress = '" + shopAddress
+                                                         + "' ORDER BY " + orderStr + " ASC");
 			while (rs.next()) {
 				String mid = rs.getString("mid");
 				String title = rs.getString("title");
@@ -128,7 +129,8 @@ public class MediaListServlet extends HttpServlet {
 				out.println("<td>" + type + "</td>");
 				out.println("<td><a href=\"remove_media?shopname=" + URLEncoder.encode(shopName, "UTF-8")
 				            + "&shopaddress=" + URLEncoder.encode(shopAddress, "UTF-8") + "&mid=" + mid
-				            + "\">削除</a></td>");
+				            + "&title=" + URLEncoder.encode(title, "UTF-8") + "&published_year=" + publishedYear
+                                            + "\">削除</a></td>");
 				out.println("</tr>");
 			}
 			rs.close();

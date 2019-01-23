@@ -71,7 +71,7 @@ public class ShopServlet extends HttpServlet {
 		String searchStr = "";
 		if(searchMail != null && !searchMail.equals("")) {
 			usedAddressStr = "検索したメールアドレス: " + searchMail + "<br>";
-			searchStr = " and mail = '" + searchMail + "'";
+			searchStr = " and mail = '%" + searchMail + "%'";
 		}
 		
 		String selectNo = "";

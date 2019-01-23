@@ -42,28 +42,35 @@ public class MediaListUSServlet extends HttpServlet {
 
 		HttpSession session = request.getSession(true);
 		
-		String searchTitle = (String)session.getAttribute("search_title");
+		String searchTitle = request.getParameter("search_title");
+		String searchGenre = request.getParameter("search_genre");
+
 		if(searchTitle == null) {
-			searchTitle = request.getParameter("search_title");
+			searchTitle = (String)session.getAttribute("search_title");
+		} else {
 			session.setAttribute("search_title", searchTitle);
 		}
-		
-		String searchGenre = (String)session.getAttribute("search_genre");
 		if(searchGenre == null) {
-			searchGenre = request.getParameter("search_genre");
+			searchGenre = (String)session.getAttribute("search_genre");
+		} else {
 			session.setAttribute("search_genre", searchGenre);
 		}
-		
-		String shopName = (String)session.getAttribute("shopname");
-		String shopAddress = (String)session.getAttribute("shopaddress");
+
+		String searchTitleStr = " and title LIKE '%" + searchTitle + "%'";
+		String searchGenreStr = " and genre LIKE '%" + searchGenre + "%'";
+
+		String shopName = request.getParameter("shopname");
+		String shopAddress = request.getParameter("shopaddress");
+
 		if(shopName == null) {
-			shopName = request.getParameter("shopname");
-			shopAddress = request.getParameter("shopaddress");
+			shopName = (String)session.getAttribute("shopname");
+		} else {
 			session.setAttribute("shopname", shopName);
-			session.setAttribute("shopaddress", shopAddress);
 		}
-		if(shopName == null) {
-			shopName = "";
+		if(shopAddress == null) {
+			shopAddress = (String)session.getAttribute("shopaddress");
+		} else {
+			session.setAttribute("shopaddress", shopAddress);
 		}
 			
 
@@ -119,26 +126,16 @@ public class MediaListUSServlet extends HttpServlet {
 			conn = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
 			stmt = conn.createStatement();
 
-			String searchTitleStr = "";
-			if(searchTitle != null) {
-				searchTitleStr = " and title LIKE '%" + searchTitle + "%'";
-			}
-
-			String searchGenreStr = "";
-			if(searchGenre != null) {
-				searchGenreStr = " and genre = '" + searchGenre + "'";
-			}
 
 			String available = "";
 			String putShop = "";
-			if(shopName != null && shopName.length() != 0) {
-				available = "<th></th>";
+			if(!shopName.equals("")) {
 				putShop = " and shopname = '" + shopName + "' and shopaddress = '" + shopAddress +"'";
 			}
 			out.println("<table border=\"1\">");
-			out.println("<tr><th>タイトル</th><th>出版年</th><th>長さ</th><th>ジャンル</th><th>媒体</th>" + available + "</tr>");
+			out.println("<tr><th>タイトル</th><th>出版年</th><th>長さ</th><th>ジャンル</th></tr>");
 			
-			ResultSet rs = stmt.executeQuery("SELECT DISTINCT title, published_year, publisher, length, genre, type "
+			ResultSet rs = stmt.executeQuery("SELECT DISTINCT title, published_year, publisher, length, genre "
 				                             + "FROM ((media NATURAL INNER JOIN store) NATURAL INNER JOIN put) NATURAL INNER JOIN content "
 				                             + "WHERE 1 = 1" + searchTitleStr + searchGenreStr + putShop + "ORDER BY " + order + " ASC");
 			while (rs.next()) {
@@ -147,7 +144,6 @@ public class MediaListUSServlet extends HttpServlet {
 				String publisher = rs.getString("publisher");
 				String length = rs.getString("length");
 				String genre = rs.getString("genre");
-				String type = rs.getString("type");
 
 				String genreJP = "";
 				switch(genre) {

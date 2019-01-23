@@ -70,18 +70,20 @@ public class MediaServlet extends HttpServlet {
 			out.println("<br>");
 			out.println("ジャンル： " + genre);
 			out.println("<br>");
-			out.println("<table border=\"1\"><tr><th>置いてある店舗名</th><th>住所</th><th>媒体</th></tr>");
+			out.println("<table border=\"1\"><tr><th>置いてある店舗名</th><th>住所</th><th>媒体</th><th></th></tr>");
 			
-			ResultSet rs = stmt.executeQuery("SELECT shopname, shopaddress, type FROM (media NATURAL INNER JOIN put) NATURAL INNER JOIN store "
+			ResultSet rs = stmt.executeQuery("SELECT shopname, shopaddress, type, available FROM (media NATURAL INNER JOIN put) NATURAL INNER JOIN store "
 			                                 + "WHERE title = '" + title + "' and published_year = " + publishedYear + " ORDER BY shopname ASC");
 			while (rs.next()) {
 				String shopName = rs.getString("shopname");
 				String shopAddress = rs.getString("shopaddress");
 				String media = rs.getString("type");
+				String available = rs.getString("available");
 				
 				out.println("<tr><td>" + shopName + "</td>");
 				out.println("<td>" + shopAddress + "</td>");
-				out.println("<td>" + media + "</td></tr>");
+				out.println("<td>" + media + "</td>");
+				out.println("<td>" + (available.equals("yes") ? "利用可" : "利用不可") + "</td><tr>");
 			}
 			
 			out.println("</table>");

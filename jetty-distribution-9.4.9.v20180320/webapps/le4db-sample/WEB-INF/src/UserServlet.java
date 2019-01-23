@@ -45,6 +45,10 @@ public class UserServlet extends HttpServlet {
 
 		session.setAttribute("search_shopname", "");
 		session.setAttribute("search_shopaddress", "");
+		session.setAttribute("search_title", "");
+		session.setAttribute("search_genre", "");
+		session.setAttribute("shopname", "");
+		session.setAttribute("shopaddress", "");
 		session.setAttribute("order", "alphabet");
 
 		out.println("<html>");
@@ -82,7 +86,7 @@ public class UserServlet extends HttpServlet {
 			out.println("<input type=\"text\" name=\"search_title\"/>");
 			out.println("<br>");
 			out.println("ジャンルで検索: ");
-			out.println("<input type=\"text\" name=\"search_shopaddress\"/>");
+			out.println("<input type=\"text\" name=\"search_genre\"/>");
 			out.println("<input type=\"hidden\" name=\"formerURL\" value=\"user\"/>");
 			out.println("<input type=\"submit\" value=\"検索\"/>");
 			out.println("</form>");

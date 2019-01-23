@@ -42,38 +42,24 @@ public class ShopListUSServlet extends HttpServlet {
 
 		HttpSession session = request.getSession(true);
 		
-		session.removeAttribute("shopname");
-		session.removeAttribute("shopaddress");
 		
 		String searchShopName = request.getParameter("search_shopname");
 		String searchShopAddress = request.getParameter("search_shopaddress");
 
 		if(searchShopName == null) {
 			searchShopName = (String)session.getAttribute("search_shopname");
+		} else {
+			session.setAttribute("search_shopname", searchShopName);
 		}
 		if(searchShopAddress == null) {
 			searchShopAddress = (String)session.getAttribute("search_shopaddress");
+		} else {
+			session.setAttribute("search_shopaddress", searchShopAddress);
 		}
 
-		String searchNameStr = "";
-		String searchAddressStr = "";
-		if(!searchShopName.equals("")) {
-			session.setAttribute("search_shopname", searchShopName);
-		}		
-		if(searchShopName.equals("")) {
-			searchNameStr = " and shopname LIKE '%" + searchShopName + "%'";
-		} else {
-			searchShopName = "";
-		}
+		String searchShopNameStr = " and shopname LIKE '%" + searchShopName + "%'";
+		String searchShopAddressStr = " and shopaddress LIKE '%" + searchShopAddress + "%'";
 		
-		if(!searchShopAddress.equals("")) {
-			session.setAttribute("search_address", searchShopAddress);
-		}
-		if(searchShopAddress != null) {
-			searchAddressStr = " and shopaddress LIKE '%" + searchShopAddress + "%'";
-		} else {
-			searchShopAddress = "";
-		}
 		
 		String order = request.getParameter("order");
 		if(order == null) {
@@ -129,7 +115,7 @@ public class ShopListUSServlet extends HttpServlet {
 			out.println("<tr><th>店舗名</th><th>住所</th><th>総所持数</th></tr>");
 			
 			ResultSet rs = stmt.executeQuery("SELECT * FROM shop WHERE 1 = 1"
-                                                         + searchNameStr + searchAddressStr + " ORDER BY " + orderStr);
+                                                         + searchShopNameStr + searchShopAddressStr + " ORDER BY " + orderStr);
 			while (rs.next()) {
 				String shopName = rs.getString("shopname");
 				String shopAddress = rs.getString("shopaddress");

@@ -63,7 +63,7 @@ public class RemoveMediaServlet extends HttpServlet {
 			st.setInt(3, mid);
 			st.executeUpdate();
 
-			response.sendRedirect("/le4db-sample/shop_sv?mid=" + mid + "&title=" + URLEncoder.encode(title, "UTF-8")
+			response.sendRedirect("/le4db-sample/medialist?mid=" + mid + "&title=" + URLEncoder.encode(title, "UTF-8")
 			                      + "&published_year=" + publishedYear);
 
 		} catch (Exception e) {
