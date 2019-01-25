@@ -47,17 +47,24 @@ public class AddUserInputServlet extends HttpServlet {
 		String addStr = "";
 		if(status != null) {
 			switch(status) {
+			case "reject_empty":
+				errorMessage = "すべての情報を入力してください";
+				break;
 			case "reject_not_address":
 				errorMessage = "メールアドレスが適切ではありません";
 				break;
 			case "reject_duplicate":
 				errorMessage = "すでに登録されているメールアドレスです";
 				break;
+			case "reject_error":
+				errorMessage = "エラーが発生しました";
+				break;
 			case "accept":
 				addStr = "<table border=\"1\"><th>メールアドレス</th><th>名前</th><th>住所</th>\n"
                                  + "<tr><td>" + request.getParameter("mail") + "</td><td>" + request.getParameter("username")
                                  + "</td><td>" + request.getParameter("useraddress") + "</td></tr></table>\n"
                                  + "を登録しました<br><br>";
+            	break;
 			default:
 
 			}

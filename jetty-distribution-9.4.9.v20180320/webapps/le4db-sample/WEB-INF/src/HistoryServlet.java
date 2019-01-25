@@ -40,7 +40,7 @@ public class HistoryServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		
-                HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(true);
 		String mailAddress = (String)session.getAttribute("identifier");
 		String userName = request.getParameter("username");
 
@@ -51,14 +51,14 @@ public class HistoryServlet extends HttpServlet {
 		Statement stmt = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
-                        String dbfile = getServletContext().getRealPath("WEB-INF/" + _dbname);
+            String dbfile = getServletContext().getRealPath("WEB-INF/" + _dbname);
 			conn = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
 			stmt = conn.createStatement();
 
 			out.println("<h3>" + userName + " さん</h3>");
 			out.println("<h3>履歴</h3>");
 			out.println("<table border=\"1\">");
-			out.println("<tr><th>タイトル</th><th>貸出日</th><th>返却日</th><th></th></tr>");
+			out.println("<tr><th>タイトル</th><th>貸出日</th><th>返却期限</th><th></th></tr>");
 
 			String title = "";
 			String finished = "";

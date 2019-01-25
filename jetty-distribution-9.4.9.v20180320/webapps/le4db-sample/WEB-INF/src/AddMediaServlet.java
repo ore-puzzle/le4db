@@ -108,12 +108,14 @@ public class AddMediaServlet extends HttpServlet {
 		
 		int max_mid = -1;
 		
+		boolean successful = true;
 		Connection conn = null;
 		Statement stmt = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 			String dbfile = getServletContext().getRealPath("WEB-INF/" + _dbname);
 			conn = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
+			conn.setAutoCommit(false);
 			stmt = conn.createStatement();
 
 			ResultSet rs = stmt.executeQuery("SELECT max(mid) AS max_mid FROM media");
@@ -141,8 +143,11 @@ public class AddMediaServlet extends HttpServlet {
 			st3.setInt(3, Integer.parseInt(publishedYear));
 			st3.executeUpdate();
 			
+			conn.commit();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
+			successful = false;
 		} finally {
 			try {
 				if (conn != null) {
@@ -153,9 +158,15 @@ public class AddMediaServlet extends HttpServlet {
 			}
 		}
 
-		session.setAttribute("add_media_status", "accept");
-		response.sendRedirect("/le4db-sample/add_media_input?mid=" + (max_mid + 1) + "&title=" + URLEncoder.encode(title, "UTF-8")
-		                      + "&published_year=" + publishedYear);
+		if(successful) {
+			session.setAttribute("add_media_status", "accept");
+			response.sendRedirect("/le4db-sample/add_media_input?mid=" + (max_mid + 1) + "&title=" + URLEncoder.encode(title, "UTF-8")
+		           		           + "&published_year=" + publishedYear);
+		} else {
+			session.setAttribute("add_media_status", "reject_error");
+			response.sendRedirect("/le4db-sample/add_media_input?mid=" + (max_mid + 1) + "&title=" + URLEncoder.encode(title, "UTF-8")
+		           		           + "&published_year=" + publishedYear);
+		}
 
 	}
 

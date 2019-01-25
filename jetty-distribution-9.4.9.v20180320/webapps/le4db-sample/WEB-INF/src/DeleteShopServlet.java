@@ -52,6 +52,7 @@ public class DeleteShopServlet extends HttpServlet {
 			Class.forName("org.sqlite.JDBC");
                         String dbfile = getServletContext().getRealPath("WEB-INF/" + _dbname);
 			conn = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
+			conn.setAutoCommit(false);
 			stmt = conn.createStatement();
 			
 			ResultSet rs = stmt.executeQuery("SELECT count(*) AS num FROM shop WHERE shopname = '" + shopName
@@ -63,31 +64,22 @@ public class DeleteShopServlet extends HttpServlet {
 			if(existsShop == 0) {
 				session.setAttribute("delete_shop_status", "reject");
 				response.sendRedirect("/le4db-sample/shoplist_sv");
+				try {
+					if (conn != null) {
+						conn.close();
+					}
+				} catch (SQLException e) {
+				e.printStackTrace();
+				}
 				return;
 			}
 
-			PreparedStatement st1 = conn.prepareStatement("DELETE FROM shop WHERE shopname = ? and shopaddress = ?");
-			st1.setString(1, shopName);
-			st1.setString(2, shopAddress);
-			st1.executeUpdate();
+			PreparedStatement st = conn.prepareStatement("DELETE FROM shop WHERE shopname = ? and shopaddress = ?");
+			st.setString(1, shopName);
+			st.setString(2, shopAddress);
+			st.executeUpdate();
 			
-			PreparedStatement st2 = conn.prepareStatement("DELETE FROM put WHERE shopname = ? and shopaddress = ?");
-			st2.setString(1, shopName);
-			st2.setString(2, shopAddress);
-			st2.executeUpdate();
-			
-			PreparedStatement st3 = conn.prepareStatement("DELETE FROM work1 WHERE shopname = ? and shopaddress = ?");
-			st3.setString(1, shopName);
-			st3.setString(2, shopAddress);
-			st3.executeUpdate();
-			
-			PreparedStatement st4 = conn.prepareStatement("DELETE FROM work2 WHERE shopname = ? and shopaddress = ?");
-			st4.setString(1, shopName);
-			st4.setString(2, shopAddress);
-			st4.executeUpdate();
-
-			response.sendRedirect("/le4db-sample/shoplist_sv?delete_shopname=" + URLEncoder.encode(shopName, "UTF-8")
-				                  + "&delete_shopaddress=" + URLEncoder.encode(shopAddress, "UTF-8"));
+			conn.commit();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -100,6 +92,9 @@ public class DeleteShopServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
+		
+		response.sendRedirect("/le4db-sample/shoplist_sv?delete_shopname=" + URLEncoder.encode(shopName, "UTF-8")
+				                  + "&delete_shopaddress=" + URLEncoder.encode(shopAddress, "UTF-8"));
 	}
 
 	protected void doPost(HttpServletRequest request,

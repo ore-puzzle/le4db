@@ -47,15 +47,19 @@ public class AddClerkInputServlet extends HttpServlet {
 		String addStr = "";
 		if(status != null) {
 			switch(status) {
-			case "reject_empty":
-				errorMessage = "名前とパスワードを入力してください";
-				break;
-			case "accept":
-				addStr = "<table border=\"1\"><th>eid</th><th>名前</th>\n"
+				case "reject_empty":
+					errorMessage = "名前とパスワードを入力してください";
+					break;
+				case "reject_error":
+					errorMessage = "エラーが発生しました";
+					break;
+				case "accept":
+					addStr = "<table border=\"1\"><th>eid</th><th>名前</th>\n"
                                  + "<tr><td>" + request.getParameter("eid") + "</td><td>" + request.getParameter("clerkname")
                                  + "</td></tr></table>\n"
                                  + "を登録しました<br><br>";
-			default:
+            		break;
+				default:
 
 			}
 			session.removeAttribute("add_clerk_status");

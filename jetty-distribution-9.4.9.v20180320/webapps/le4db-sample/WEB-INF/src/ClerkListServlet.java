@@ -42,20 +42,56 @@ public class ClerkListServlet extends HttpServlet {
 
 		HttpSession session = request.getSession(true);
 		
-		String shopName = (String)session.getAttribute("shopname");
-		String shopAddress = (String)session.getAttribute("shopaddress");
+		String shopName = request.getParameter("shopname");
+		String shopAddress = request.getParameter("shopaddress");
+		
 		if(shopName == null) {
-			shopName = request.getParameter("shopname");
-			shopAddress = request.getParameter("shopaddress");
+			shopName = (String)session.getAttribute("shopname");
+		} else {
 			session.setAttribute("shopname", shopName);
+		}
+		if(shopAddress == null) {
+			shopAddress = (String)session.getAttribute("shopaddress");
+		} else {
 			session.setAttribute("shopaddress", shopAddress);
 		}
+		
+		String searchClerkName = request.getParameter("search_clerkname");
+		
+		if(searchClerkName == null) {
+			searchClerkName = (String)session.getAttribute("search_clerkname");
+		} else {
+			session.setAttribute("search_clerkname", searchClerkName);
+		}
+		
+		String usedNameStr = searchClerkName.equals("") ? "" : "検索した名前: " + searchClerkName + "<br>";
+		String searchNameStr = " and clerkname LIKE '%" + searchClerkName + "%'";
+		String valueNameStr = " value=\"" + searchClerkName + "\"";
 
 		String order = request.getParameter("order");
 		if(order == null) {
 			order = (String)session.getAttribute("order");
 		} else {
 			session.setAttribute("order", order);
+		}
+		
+		String status = (String)session.getAttribute("remove_clerk_status");
+		String errorMessage = "";
+		String removeStr = "";
+		if(status != null) {
+			switch(status) {
+				case "reject_error":
+					errorMessage = "エラーが発生しました";
+					break;
+				case "accept":
+					removeStr = "<table border=\"1\"><tr><th>eid</th><th>名前</th></tr>\n"
+				        + "<tr><td>" + request.getParameter("eid") + "</td><td>" + request.getParameter("clerkname") + "</td></tr></table>\n"
+				        + "を削除しました<br><br>";
+					break;
+				default:
+				
+			}
+			session.removeAttribute("remove_clerk_status");
 		}
 
 		String selectEid = "";
@@ -73,25 +109,26 @@ public class ClerkListServlet extends HttpServlet {
 		default:
 			orderStr = "eid";
 		}
-		
-		String removeEid = request.getParameter("eid");
-		String removeClerkName = request.getParameter("clerkname");
-		String removeStr = "";
-		if(removeEid != null) {
-			removeStr = "<table border=\"1\"><tr><th>eid</th><th>名前</th></tr>\n"
-				        + "<tr><td>" + removeEid + "</td><td>" + removeClerkName + "</td></tr></table>\n"
-				        + "を削除しました<br><br>";
-		}
 
 		out.println("<html>");
 		out.println("<body>");
 		out.println("<h3>" + shopName + "</h3>");
 		out.println("<h3>店員一覧</h3>");
+		out.println(errorMessage);
 		out.println(removeStr);
-		out.println("<a href=\"get_clerk_input?shopname=" + shopName + "&shopaddress=" + shopAddress + "\">追加する</a><br><br>");
+		out.println("<a href=\"get_clerk_input?shopname=" + URLEncoder.encode(shopName, "UTF-8")
+		             + "&shopaddress=" + URLEncoder.encode(shopAddress, "UTF-8") + "\">追加する</a><br><br>");
+		out.println(usedNameStr);
+		if(!usedNameStr.equals("")) {
+			out.println("<br>");
+		}
 		out.println("<form action=\"clerklist\" method=\"GET\">");
-		out.println("ソート： ");
-		out.println("<br>");
+		out.println("名前で検索: ");
+		out.println("<input type=\"text\" name=\"search_clerkname\"" + valueNameStr + "/>");
+		out.println("<input type=\"submit\" value=\"検索\"/>");
+		out.println("</form>");
+		out.println("<form action=\"clerklist\" method=\"GET\">");
+		out.println("ソート: ");
 		out.println("<select name =\"order\">");
 		out.println("<option value=\"id\" " + selectEid + ">eid順</option>");
 		out.println("<option value=\"alphabet\" " + selectAlphabet + ">五十音順</option>");
@@ -112,7 +149,7 @@ public class ClerkListServlet extends HttpServlet {
 			out.println("<tr><th>eid</th><th>名前</th><th></th></tr>");
 			
 			ResultSet rs = stmt.executeQuery("SELECT DISTINCT eid, clerkname FROM clerk NATURAL INNER JOIN work1 WHERE shopname = '" + shopName
-			                                  + "' and shopaddress = '" + shopAddress + "' ORDER BY " + orderStr + " ASC");
+			                                  + "' and shopaddress = '" + shopAddress + "'" + searchNameStr + " ORDER BY " + orderStr + " ASC");
 			while (rs.next()) {
 				String eid = rs.getString("eid");
 				String clerkName = rs.getString("clerkname");

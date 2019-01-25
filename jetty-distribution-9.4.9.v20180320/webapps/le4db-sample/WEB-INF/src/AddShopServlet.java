@@ -47,19 +47,20 @@ public class AddShopServlet extends HttpServlet {
 		String shopName = request.getParameter("shopname");
 		String shopAddress = request.getParameter("shopaddress");
 		
-		if(shopName == null || shopAddress == null || shopName.length() == 0 || shopAddress.length() == 0) {
+		if(shopName.equals("") || shopAddress.equals("")) {
 			session.setAttribute("add_shop_status", "reject_empty");
 			response.sendRedirect("/le4db-sample/add_shop_input");
 			return;
 		}
 		
-		
+		boolean successful = true;
 		Connection conn = null;
 		Statement stmt = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 			String dbfile = getServletContext().getRealPath("WEB-INF/" + _dbname);
 			conn = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
+			conn.setAutoCommit(false);
 			stmt = conn.createStatement();
 
 			int existsShop = -1;
@@ -84,11 +85,14 @@ public class AddShopServlet extends HttpServlet {
 			PreparedStatement st = conn.prepareStatement("INSERT INTO shop VALUES(?, ?, ?)");
 			st.setString(1, shopName);
 			st.setString(2, shopAddress);
-			st.setInt(3, 1);
+			st.setInt(3, 0);
 			st.executeUpdate();
+			
+			conn.commit();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			successful = false;
 		} finally {
 			try {
 				if (conn != null) {
@@ -99,9 +103,15 @@ public class AddShopServlet extends HttpServlet {
 			}
 		}
 
-		session.setAttribute("add_shop_status", "accept");
-		response.sendRedirect("/le4db-sample/add_shop_input?shopname=" + URLEncoder.encode(shopName, "UTF-8")
+		if(successful) {
+			session.setAttribute("add_shop_status", "accept");
+			response.sendRedirect("/le4db-sample/add_shop_input?shopname=" + URLEncoder.encode(shopName, "UTF-8")
 		                      + "&shopaddress=" + URLEncoder.encode(shopAddress, "UTF-8"));
+		} else {
+			session.setAttribute("add_shop_status", "reject_error");
+			response.sendRedirect("/le4db-sample/add_shop_input?shopname=" + URLEncoder.encode(shopName, "UTF-8")
+		                      + "&shopaddress=" + URLEncoder.encode(shopAddress, "UTF-8"));
+		}
 
 	}
 

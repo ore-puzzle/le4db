@@ -83,17 +83,23 @@ public class MediaListUSServlet extends HttpServlet {
 
 		String selectAlphabet = "";
 		String selectLength = "";
+		String selectYear = "";
+		String orderStr = "";
 		switch(order) {
 		case "alphabet":
-			order = "title";
+			orderStr = "title ASC";
 			selectAlphabet = "selected";
 			break;
 		case "length":
-			order = "length";
+			orderStr = "length ASC";
 			selectLength = "selected";
 			break;
+		case "published_year":
+			orderStr = "published_year DESC";
+			selectYear = "selected";
+			break;
 		default:
-			order = "title";
+			orderStr = "title";
 		}
 		
 		String filter = request.getParameter("filter");
@@ -106,13 +112,19 @@ public class MediaListUSServlet extends HttpServlet {
 		out.println("<html>");
 		out.println("<body>");
 		out.println("<h3>" + shopName + "</h3>");
-		out.println("<h3>メディア一覧</h3>");
+		out.println("<h3>" + (shopName.equals("") ? "メディア検索結果" : "メディア一覧") + "</h3>");
+		if(shopName.equals("")) {
+			out.println("検索したタイトル: " + searchTitle);
+			out.println("<br>");
+			out.println("検索したジャンル: " + translateGenre(searchGenre));
+			out.println("<br><br>");
+		}
 		out.println("<form action=\"medialist_us\" method=\"GET\">");
-		out.println("ソート： ");
-		out.println("<br>");
+		out.println("ソート: ");
 		out.println("<select name =\"order\">");
 		out.println("<option value=\"alphabet\" " + selectAlphabet + ">五十音順</option>");
 		out.println("<option value=\"length\" " + selectLength + ">長さ順</option>");
+		out.println("<option value=\"published_year\" " + selectYear + ">出版年順</option>");
 		out.println("</select>");
 		out.println("<input type=\"submit\" value=\"適用\"/>");
 		out.println("</form>");
@@ -137,7 +149,7 @@ public class MediaListUSServlet extends HttpServlet {
 			
 			ResultSet rs = stmt.executeQuery("SELECT DISTINCT title, published_year, publisher, length, genre "
 				                             + "FROM ((media NATURAL INNER JOIN store) NATURAL INNER JOIN put) NATURAL INNER JOIN content "
-				                             + "WHERE 1 = 1" + searchTitleStr + searchGenreStr + putShop + "ORDER BY " + order + " ASC");
+				                             + "WHERE 1 = 1" + searchTitleStr + searchGenreStr + putShop + "ORDER BY " + orderStr);
 			while (rs.next()) {
 				String title = rs.getString("title");
 				int publishedYear = rs.getInt("published_year");
@@ -145,29 +157,7 @@ public class MediaListUSServlet extends HttpServlet {
 				String length = rs.getString("length");
 				String genre = rs.getString("genre");
 
-				String genreJP = "";
-				switch(genre) {
-					case "movie":
-						genreJP = "映画";
-						break;
-					case "drama":
-						genreJP = "ドラマ";
-						break;
-					case "anime":
-						genreJP = "アニメ";
-						break;
-					case "sport":
-						genreJP = "スポーツ";
-						break;
-					case "documentary":
-						genreJP = "ドキュメンタリー";
-						break;
-					case "variety":
-						genreJP = "バラエティ";
-						break;
-					default:
-						genreJP = genre;
-				}
+				String genreJP = translateGenre(genre);
 
 				out.println("<tr>");
 				out.println("<td><a href=\"media?title=" + URLEncoder.encode(title, "UTF-8")
@@ -215,5 +205,26 @@ public class MediaListUSServlet extends HttpServlet {
 	}
 
 	public void destroy() {
+	}
+	
+	private static String translateGenre(String genre) {
+		switch(genre) {
+			case "all":
+				return "全て";
+			case "movie":
+				return "映画";
+			case "drama":
+				return "ドラマ";
+			case "anime":
+				return "アニメ";
+			case "sport":
+				return "スポーツ";
+			case "documentary":
+				return "ドキュメンタリー";
+			case "variety":
+				return "バラエティ";
+			default:
+				return "";
+		}
 	}
 }

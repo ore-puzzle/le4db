@@ -48,12 +48,14 @@ public class RemoveClerkServlet extends HttpServlet {
 		int eid = Integer.parseInt(request.getParameter("eid"));
 		String clerkName = request.getParameter("clerkname");
 
+		boolean successful = true;
 		Connection conn = null;
 		Statement stmt = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 			String dbfile = getServletContext().getRealPath("WEB-INF/" + _dbname);
 			conn = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
+			conn.setAutoCommit(false);
 			stmt = conn.createStatement();
 			
 			PreparedStatement st1 = conn.prepareStatement("DELETE FROM work1 WHERE shopname = ? and shopaddress = ? and eid = ?");
@@ -91,9 +93,12 @@ public class RemoveClerkServlet extends HttpServlet {
 				st3.setString(2, shopAddress);
 				st3.executeUpdate();
 			}
+			
+			conn.commit();
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			successful = false;
 		} finally {
 			try {
 				if (conn != null) {
@@ -104,8 +109,13 @@ public class RemoveClerkServlet extends HttpServlet {
 			}
 		}
 		
-		response.sendRedirect("/le4db-sample/shop_sv?eid=" + eid
-				                  + "&clerkname=" + URLEncoder.encode(clerkName, "UTF-8"));
+		if(successful) {
+			session.setAttribute("remove_clerk_status", "accept");
+			response.sendRedirect("/le4db-sample/clerklist?eid=" + eid + "&clerkname=" + URLEncoder.encode(clerkName, "UTF-8"));
+		} else {
+			session.setAttribute("remove_clerk_status", "reject_error");
+			response.sendRedirect("/le4db-sample/clerklist?eid=" + eid + "&clerkname=" + URLEncoder.encode(clerkName, "UTF-8"));
+		}
 	}
 
 	protected void doPost(HttpServletRequest request,

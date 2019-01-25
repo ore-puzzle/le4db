@@ -60,15 +60,15 @@ public class MediaServlet extends HttpServlet {
 			stmt = conn.createStatement();
 
 			out.println("<h3>詳細</h3>");
-			out.println("タイトル： " + title);
+			out.println("タイトル: " + title);
 			out.println("<br>");
-			out.println("出版年： " + publishedYear);
+			out.println("出版年: " + publishedYear);
 			out.println("<br>");
-			out.println("出版社： " + publisher);
+			out.println("出版社: " + publisher);
 			out.println("<br>");
-			out.println("長さ： " + length);
+			out.println("長さ: " + length);
 			out.println("<br>");
-			out.println("ジャンル： " + genre);
+			out.println("ジャンル: " + genre);
 			out.println("<br>");
 			out.println("<table border=\"1\"><tr><th>置いてある店舗名</th><th>住所</th><th>媒体</th><th></th></tr>");
 			

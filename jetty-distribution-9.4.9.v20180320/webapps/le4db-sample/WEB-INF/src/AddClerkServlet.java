@@ -47,7 +47,7 @@ public class AddClerkServlet extends HttpServlet {
 		String clerkName = request.getParameter("clerkname");
 		String password = request.getParameter("password");
 		
-		if(clerkName == null || password == null || clerkName.length() == 0 || password.length() == 0) {
+		if(clerkName.equals("") || password.equals("")) {
 			session.setAttribute("add_clerk_status", "reject_empty");
 			response.sendRedirect("/le4db-sample/add_clerk_input");
 			return;
@@ -55,14 +55,17 @@ public class AddClerkServlet extends HttpServlet {
 		
 		int max_eid = -1;
 		
+		boolean successful = true;
 		Connection conn = null;
 		Statement stmt = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 			String dbfile = getServletContext().getRealPath("WEB-INF/" + _dbname);
 			conn = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
+			conn.setAutoCommit(false);
 			stmt = conn.createStatement();
 
+			
 			ResultSet rs = stmt.executeQuery("SELECT max(eid) AS max_eid FROM clerk");
 			while (rs.next()) {
 				max_eid = rs.getInt("max_eid");
@@ -74,8 +77,11 @@ public class AddClerkServlet extends HttpServlet {
 			st.setString(3, password);
 			st.executeUpdate();
 			
+			conn.commit();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
+			successful = false;
 		} finally {
 			try {
 				if (conn != null) {
@@ -85,9 +91,14 @@ public class AddClerkServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-
-		session.setAttribute("add_clerk_status", "accept");
-		response.sendRedirect("/le4db-sample/add_clerk_input?eid=" + (max_eid + 1) + "&clerkname=" + URLEncoder.encode(clerkName, "UTF-8"));
+		
+		if(successful) {
+			session.setAttribute("add_clerk_status", "accept");
+			response.sendRedirect("/le4db-sample/add_clerk_input?eid=" + (max_eid + 1) + "&clerkname=" + URLEncoder.encode(clerkName, "UTF-8"));
+		} else {
+			session.setAttribute("add_clerk_status", "reject_error");
+			response.sendRedirect("/le4db-sample/add_clerk_input?eid=" + (max_eid + 1) + "&clerkname=" + URLEncoder.encode(clerkName, "UTF-8"));
+		}
 
 	}
 

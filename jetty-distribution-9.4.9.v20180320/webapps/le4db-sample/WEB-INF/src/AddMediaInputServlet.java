@@ -56,6 +56,9 @@ public class AddMediaInputServlet extends HttpServlet {
 			case "reject_not_time":
 				errorMessage = "長さが不適切です";
 				break;
+			case "reject_error":
+				errorMessage = "エラーが発生しました";
+				break;
 			case "accept":
 				addStr = "<table border=\"1\"><th>mid</th><th>タイトル</th><th>出版年</th>\n"
                                  + "<tr><td>" + request.getParameter("mid") + "</td><td>" + request.getParameter("title")
@@ -79,7 +82,7 @@ public class AddMediaInputServlet extends HttpServlet {
 		out.println(addStr);
 
 		out.println("<form action=\"add_media\" method=\"GET\">");
-		out.println("媒体");
+		out.println("媒体: ");
 		out.println("<input type=\"radio\" name=\"media\" value=\"Blu-ray\">Blu-ray</input>");
 		out.println("<input type=\"radio\" name=\"media\" value=\"DVD\">DVD</input>");
 		out.println("<input type=\"radio\" name=\"media\" value=\"VHS\">VHS</input>");
@@ -113,7 +116,7 @@ public class AddMediaInputServlet extends HttpServlet {
 		out.println("</form>");
 
 
-		out.println("<br/>");
+		out.println("<br>");
 		out.println("<a href=\"supervisor\">前のページに戻る</a>");
 
 		out.println("</body>");

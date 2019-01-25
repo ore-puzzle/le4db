@@ -1,6 +1,7 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -78,6 +79,7 @@ public class UserServlet extends HttpServlet {
 			out.println("<br>");
 			out.println("住所で検索: ");
 			out.println("<input type=\"text\" name=\"search_shopaddress\"/>");
+			out.println("<br>");
 			out.println("<input type=\"submit\" value=\"検索\"/>");
 			out.println("</form>");
 			out.println("<h4>作品検索</h4>");
@@ -86,12 +88,19 @@ public class UserServlet extends HttpServlet {
 			out.println("<input type=\"text\" name=\"search_title\"/>");
 			out.println("<br>");
 			out.println("ジャンルで検索: ");
-			out.println("<input type=\"text\" name=\"search_genre\"/>");
+			out.println("<input type=\"radio\" name=\"search_genre\" value=\"all\" selected>全て</input>");
+			out.println("<input type=\"radio\" name=\"search_genre\" value=\"movie\">映画</input>");
+			out.println("<input type=\"radio\" name=\"search_genre\" value=\"drama\">ドラマ</input>");
+			out.println("<input type=\"radio\" name=\"search_genre\" value=\"anime\">アニメ</input>");
+			out.println("<input type=\"radio\" name=\"search_genre\" value=\"variety\">バラエティ</input>");
+			out.println("<input type=\"radio\" name=\"search_genre\" value=\"sport\">スポーツ</input>");
+			out.println("<input type=\"radio\" name=\"search_genre\" value=\"documentary\">ドキュメンタリー</input>");
 			out.println("<input type=\"hidden\" name=\"formerURL\" value=\"user\"/>");
+			out.println("<br>");
 			out.println("<input type=\"submit\" value=\"検索\"/>");
 			out.println("</form>");
 			out.println("<br><br>");
-			out.println("<a href=\"history?username=" + userName + "\">履歴</a>");
+			out.println("<a href=\"history?username=" + URLEncoder.encode(userName, "UTF-8") + "\">履歴</a>");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -116,5 +125,4 @@ public class UserServlet extends HttpServlet {
 
 	public void destroy() {
 	}
-
 }

@@ -1,6 +1,7 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -44,12 +45,15 @@ public class ReturnServlet extends HttpServlet {
 
 		String mailAddress = request.getParameter("mail");
 		int mid = Integer.parseInt(request.getParameter("mid"));
+		String title = request.getParameter("title");
 
+		boolean successful = true;
 		Connection conn = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
                         String dbfile = getServletContext().getRealPath("WEB-INF/" + _dbname);
 			conn = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
+			conn.setAutoCommit(false);
 
 			PreparedStatement st1 = conn.prepareStatement("UPDATE rent SET finished = 'yes' WHERE mail = ? and mid = ?");
 			st1.setString(1, mailAddress);
@@ -59,12 +63,12 @@ public class ReturnServlet extends HttpServlet {
 			PreparedStatement st2 = conn.prepareStatement("UPDATE media SET available = 'yes' WHERE mid = ?");
 			st2.setInt(1, mid);
 			st2.executeUpdate();
-
-			session.setAttribute("return_status", "returned");
-			response.sendRedirect("/le4db-sample/shop");
+			
+			conn.commit();
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			successful = false;
 		} finally {
 			try {
 				if (conn != null) {
@@ -73,6 +77,14 @@ public class ReturnServlet extends HttpServlet {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		}
+		
+		if(successful) {
+			session.setAttribute("return_status", "accept");
+			response.sendRedirect("/le4db-sample/shop?mail=" + mailAddress + "&mid=" + mid + "&title=" + URLEncoder.encode(title, "UTF-8"));
+		} else {
+			session.setAttribute("return_status", "reject_error");
+			response.sendRedirect("/le4db-sample/shop?mail=" + mailAddress + "&mid=" + mid + "&title=" + URLEncoder.encode(title, "UTF-8"));
 		}
 	}
 

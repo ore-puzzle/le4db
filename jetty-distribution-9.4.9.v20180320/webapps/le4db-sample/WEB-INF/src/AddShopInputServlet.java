@@ -53,11 +53,15 @@ public class AddShopInputServlet extends HttpServlet {
 			case "reject_duplicate":
 				errorMessage = "すでに登録されている店舗です";
 				break;
+			case "reject_error":
+				errorMessage = "エラーが発生しました";
+				break;
 			case "accept":
 				addStr = "<table border=\"1\"><th>店舗名</th><th>住所</th>\n"
                                  + "<tr><td>" + request.getParameter("shopname") + "</td><td>" + request.getParameter("shopaddress")
                                  + "</td></tr></table>\n"
                                  + "を登録しました<br><br>";
+            	break;
 			default:
 
 			}

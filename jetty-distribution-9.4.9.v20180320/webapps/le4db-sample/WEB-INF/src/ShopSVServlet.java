@@ -41,14 +41,22 @@ public class ShopSVServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		HttpSession session = request.getSession(true);
+		
+		session.setAttribute("search_clerkname", "");
+		session.setAttribute("search_title", "");
 
 		
-		String shopName = (String)session.getAttribute("shopname");
-		String shopAddress = (String)session.getAttribute("shopaddress");
+		String shopName = request.getParameter("shopname");
+		String shopAddress = request.getParameter("shopaddress");
+		
 		if(shopName == null) {
-			shopName = request.getParameter("shopname");
-			shopAddress = request.getParameter("shopaddress");
+			shopName = (String)session.getAttribute("shopname");
+		} else {
 			session.setAttribute("shopname", shopName);
+		}
+		if(shopAddress == null) {
+			shopAddress = (String)session.getAttribute("shopaddress");
+		} else {
 			session.setAttribute("shopaddress", shopAddress);
 		}
 

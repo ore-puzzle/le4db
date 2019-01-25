@@ -63,7 +63,7 @@ public class BranchServlet extends HttpServlet {
 
 			if(identifier.equals("supervisor")) {
 				if(password.equals("svpw")) {
-                   			session.setAttribute("identifier", "supervisor");
+                   	session.setAttribute("identifier", "supervisor");
 					response.sendRedirect("/le4db-sample/supervisor");
 				} else {
 					session.setAttribute("login_status", "reject");
@@ -72,7 +72,7 @@ public class BranchServlet extends HttpServlet {
 			} else if (isClerk) {
 				ResultSet rs = stmt.executeQuery("SELECT clerkpw FROM clerk WHERE eid = " + eid);
 				if(rs.next() && password.equals(rs.getString("clerkpw"))) {
-                  			session.setAttribute("identifier", eid);
+                  	session.setAttribute("identifier", eid);
 					response.sendRedirect("/le4db-sample/clerk");
 				} else {
 					session.setAttribute("login_status", "reject");

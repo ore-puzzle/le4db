@@ -62,7 +62,7 @@ public class GetMediaServlet extends HttpServlet {
 			return;
 		}
 		
-		
+		boolean successful = true;
 		String title = "";
 		int publishedYear = 0;
 		String media = "";
@@ -72,7 +72,9 @@ public class GetMediaServlet extends HttpServlet {
 			Class.forName("org.sqlite.JDBC");
 			String dbfile = getServletContext().getRealPath("WEB-INF/" + _dbname);
 			conn = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
+			conn.setAutoCommit(false);
 			stmt = conn.createStatement();
+
 
 			int existsMedia = -1;
 			ResultSet rs1 = stmt.executeQuery("SELECT count(*) AS num FROM media WHERE mid =" + mid);
@@ -92,22 +94,75 @@ public class GetMediaServlet extends HttpServlet {
 				return;
 			}
 			
-			PreparedStatement st = conn.prepareStatement("INSERT INTO put VALUES(?, ?, ?)");
-			st.setInt(1, Integer.parseInt(mid));
-			st.setString(2, shopName);
-			st.setString(3, shopAddress);
-			st.executeUpdate();
-			
-			ResultSet rs2 = stmt.executeQuery("SELECT title, published_year, type "
-			                                  + "FROM media NATURAL INNER JOIN store WHERE mid =" + mid);
-			while(rs2.next()) {
-				title = rs2.getString("title");
-				publishedYear = rs2.getInt("published_year");
-				media = rs2.getString("type");
+			int already = -1;
+			ResultSet rs2 = stmt.executeQuery("SELECT count(*) AS num FROM put WHERE mid =" + mid + " and shopname = '"
+			                                   + shopName + "' and shopaddress = '" + shopAddress + "'");
+			while (rs2.next()) {
+				already = rs2.getInt("num");
 			}
+			if(already > 0) {
+				session.setAttribute("get_media_status", "reject_duplicate");
+				response.sendRedirect("/le4db-sample/get_media_input");
+				try {
+					if (conn != null) {
+						conn.close();
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				return;
+			}
+			
+			int anotherShop = -1;
+			ResultSet rs3 = stmt.executeQuery("SELECT count(*) AS num FROM put WHERE mid =" + mid);
+			while (rs3.next()) {
+				anotherShop = rs3.getInt("num");
+			}
+			if(anotherShop > 0) {
+				session.setAttribute("get_media_status", "reject_put_another_shop");
+				response.sendRedirect("/le4db-sample/get_media_input");
+				try {
+					if (conn != null) {
+						conn.close();
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				return;
+			}
+			
+			PreparedStatement st1 = conn.prepareStatement("INSERT INTO put VALUES(?, ?, ?)");
+			st1.setInt(1, Integer.parseInt(mid));
+			st1.setString(2, shopName);
+			st1.setString(3, shopAddress);
+			st1.executeUpdate();
+			
+			int totalMedia = -1;
+			ResultSet rs4 = stmt.executeQuery("SELECT total_media FROM shop WHERE shopname = '" + shopName
+				                               + "' and shopaddress = '" + shopAddress + "'");
+			while(rs4.next()) {
+				totalMedia = rs4.getInt("total_media");
+			}
+			
+			PreparedStatement st2 = conn.prepareStatement("UPDATE shop SET total_media = ? WHERE shopname = ? and shopaddress = ?");
+			st2.setInt(1, totalMedia + 1);
+			st2.setString(2, shopName);
+			st2.setString(3, shopAddress);
+			st2.executeUpdate();
+			
+			ResultSet rs5 = stmt.executeQuery("SELECT title, published_year, type "
+			                                  + "FROM media NATURAL INNER JOIN store WHERE mid =" + mid);
+			while(rs5.next()) {
+				title = rs5.getString("title");
+				publishedYear = rs5.getInt("published_year");
+				media = rs5.getString("type");
+			}
+			
+			conn.commit();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			successful = false;
 		} finally {
 			try {
 				if (conn != null) {
@@ -118,9 +173,15 @@ public class GetMediaServlet extends HttpServlet {
 			}
 		}
 
-		session.setAttribute("get_media_status", "accept");
-		response.sendRedirect("/le4db-sample/get_media_input?mid=" + mid + "&title=" + URLEncoder.encode(title, "UTF-8")
-		                      +"&published_year=" + publishedYear + "&media=" + URLEncoder.encode(media, "UTF-8"));
+		if(successful) {
+			session.setAttribute("get_media_status", "accept");
+			response.sendRedirect("/le4db-sample/get_media_input?mid=" + mid + "&title=" + URLEncoder.encode(title, "UTF-8")
+		                 	     +"&published_year=" + publishedYear + "&media=" + URLEncoder.encode(media, "UTF-8"));
+		} else {
+			session.setAttribute("get_media_status", "reject_error");
+			response.sendRedirect("/le4db-sample/get_media_input?mid=" + mid + "&title=" + URLEncoder.encode(title, "UTF-8")
+		                 	     +"&published_year=" + publishedYear + "&media=" + URLEncoder.encode(media, "UTF-8"));
+		}
 
 	}
 

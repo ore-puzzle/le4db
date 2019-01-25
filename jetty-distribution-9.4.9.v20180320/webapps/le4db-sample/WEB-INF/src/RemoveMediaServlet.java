@@ -49,25 +49,40 @@ public class RemoveMediaServlet extends HttpServlet {
 		String title = request.getParameter("title");
 		int publishedYear = Integer.parseInt(request.getParameter("published_year"));
 
+		boolean successful = true;
 		Connection conn = null;
 		Statement stmt = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 			String dbfile = getServletContext().getRealPath("WEB-INF/" + _dbname);
 			conn = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
+			conn.setAutoCommit(false);
 			stmt = conn.createStatement();
 			
-			PreparedStatement st = conn.prepareStatement("DELETE FROM put WHERE shopname = ? and shopaddress = ? and mid = ?");
-			st.setString(1, shopName);
-			st.setString(2, shopAddress);
-			st.setInt(3, mid);
-			st.executeUpdate();
-
-			response.sendRedirect("/le4db-sample/medialist?mid=" + mid + "&title=" + URLEncoder.encode(title, "UTF-8")
-			                      + "&published_year=" + publishedYear);
+			PreparedStatement st1 = conn.prepareStatement("DELETE FROM put WHERE shopname = ? and shopaddress = ? and mid = ?");
+			st1.setString(1, shopName);
+			st1.setString(2, shopAddress);
+			st1.setInt(3, mid);
+			st1.executeUpdate();
+			
+			int totalMedia = -1;
+			ResultSet rs = stmt.executeQuery("SELECT total_media FROM shop WHERE shopname = '" + shopName
+				                               + "' and shopaddress = '" + shopAddress + "'");
+			while(rs.next()) {
+				totalMedia = rs.getInt("total_media");
+			}
+			
+			PreparedStatement st2 = conn.prepareStatement("UPDATE shop SET total_media = ? WHERE shopname = ? and shopaddress = ?");
+			st2.setInt(1, totalMedia - 1);
+			st2.setString(2, shopName);
+			st2.setString(3, shopAddress);
+			st2.executeUpdate();
+			
+			conn.commit();
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			successful = false;
 		} finally {
 			try {
 				if (conn != null) {
@@ -76,6 +91,16 @@ public class RemoveMediaServlet extends HttpServlet {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		}
+		
+		if(successful) {
+			session.setAttribute("remove_media_status", "accept");
+			response.sendRedirect("/le4db-sample/medialist?mid=" + mid + "&title=" + URLEncoder.encode(title, "UTF-8")
+			                   + "&published_year=" + publishedYear);
+		} else {
+			session.setAttribute("remove_media_status", "reject_error");
+			response.sendRedirect("/le4db-sample/medialist?mid=" + mid + "&title=" + URLEncoder.encode(title, "UTF-8")
+			                   + "&published_year=" + publishedYear);
 		}
 	}
 

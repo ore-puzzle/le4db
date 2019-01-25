@@ -56,12 +56,22 @@ public class GetMediaInputServlet extends HttpServlet {
 			case "reject_not_found":
 				errorMessage = "そのようなメディアは存在しません";
 				break;
+			case "reject_duplicate":
+				errorMessage = "すでにこの店舗に置いてあります";
+				break;
+			case "reject_put_another_shop":
+				errorMessage = "現在他の店に置かれています";
+				break;
+			case "reject_error":
+				errorMessage = "エラーが発生しました";
+				break;
 			case "accept":
 				addStr = "<table border=\"1\"><th>mid</th><th>タイトル</th><th>出版年</th><th>媒体</th>\n"
                                  + "<tr><td>" + request.getParameter("mid") + "</td><td>" + request.getParameter("title")
                                  + "</td><td>" + request.getParameter("published_year") + "</td><td>" + request.getParameter("media")
                                  + "</td></tr></table>\n"
                                  + "を登録しました<br><br>";
+            	break;
 			default:
 
 			}

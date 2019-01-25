@@ -88,13 +88,13 @@ public class ShopListUSServlet extends HttpServlet {
 		out.println("<html>");
 		out.println("<body>");
 		out.println("<h3>店舗検索結果</h3>");
-		out.println("検索した店舗名： " + searchShopName);
+		out.println("検索した店舗名: " + searchShopName);
 		out.println("<br>");
-		out.println("検索した住所： " + searchShopAddress);
+		out.println("検索した住所: " + searchShopAddress);
 		out.println("<br><br>");
 		out.println("<form action=\"shoplist_us\" method=\"GET\">");
-		out.println("ソート： ");
-		out.println("<select name =\"order\">");
+		out.println("ソート: ");
+		out.println("<select name=\"order\">");
 		out.println("<option value=\"alphabet\" " + selectAlphabet + ">五十音順</option>");
 		out.println("<option value=\"total_num\" " + selectNum + ">総所持数順</option>");
 		out.println("</select>");

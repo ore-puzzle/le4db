@@ -1,0 +1,89 @@
+\documentclass[a4j]{jarticle}
+\usepackage[dvipdfm]{graphicx}
+
+\title{計算機科学実験及び演習４データベース 報告書} 
+\author{粟納 裕貴 \\ (学籍番号: 0000000000)} % 氏名および学籍番号
+\date{提出日: \today} % 提出日
+%\date{提出日: 2014年1月31日}
+
+\begin{document}
+
+\maketitle
+
+\section{システム概要}
+
+システムの説明．
+どのような機能を実装したか．
+課題１で提出した内容からの変更点などがあればそれも書く．
+
+
+\section{実体関連図}
+
+実体関連図とその説明．
+
+\section{関係スキーマ}
+
+関係スキーマとその説明．
+データの一部(先頭の数行分など)を例として示す．
+
+
+\section{機能・インタフェース}
+
+各機能および対応するインタフェースの説明を行い，典型的な状態のブラウザ画面キャプチャ図を付ける．
+それぞれの画面でどのテーブルが関係しているか，発行されるSQL文の例などを記載する．
+各機能ごとに小節(subsection)を作って記載するとよい．
+
+なお，LaTeXにおいてブラウザ画面のキャプチャ図を挿入するには，例えば以下のような方法がある．
+
+\begin{enumerate}
+
+\item 画像の保存
+
+[PrintScreen]キー(アクティブなウィンドウのみをキャプチャするには[Alt]+[PrintScreen]キー)\footnote{キーボードによっては[PrtSc]となっている．}を押し，画像ビューア/エディタ(GIMPやIrfanView等を用いることができる)に貼り付け([Ctrl]+[V])，PNG形式で保存する\footnote{EPS形式で保存可能な場合はEPS形式を用いるとよい．EPS形式の場合，バウンディングボックスファイルの作成は不要となる．}．ここで保存された画像を sample.png とする．
+
+\item バウンディングボックスファイルの作成
+
+sample.png を保存したディレクトリにて以下のコマンドを実行し，sample.bbファイルを作成する．
+
+\begin{verbatim}
+ebb sample.png
+\end{verbatim}
+
+\item 画像の挿入
+
+.pngファイルおよび.bbファイルを同一のディレクトリに配置し，以下のような記述を用いて図を挿入する．挿入された図のサンプルは図\ref{fig:sample}のようになる．
+
+\begin{verbatim}
+\begin{figure}[tp]
+\begin{center}
+\includegraphics[scale=0.8]{sample.png}
+\end{center}
+\caption{サンプル．}
+\label{fig:sample}
+\end{figure}
+\end{verbatim}
+
+\begin{figure}[tp]
+\begin{center}
+\includegraphics[scale=0.8]{sample.png}
+\end{center}
+\caption{サンプル．}
+\label{fig:sample}
+\end{figure}
+
+PNG画像を取り込んだPDFファイルの作成にはdvipdfmxコマンドを用いるとよい．
+
+\end{enumerate}
+
+
+\section{工夫点}
+
+工夫した点．エラー処理，SQL文に関する工夫，索引の利用，ビューの利用，トランザクション処理など．
+
+
+\section{感想}
+
+システム開発に関する感想，および本演習全体に関する感想・意見．
+
+
+\end{document}

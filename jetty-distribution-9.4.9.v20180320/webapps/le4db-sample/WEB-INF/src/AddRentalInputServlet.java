@@ -46,20 +46,32 @@ public class AddRentalInputServlet extends HttpServlet {
 		String status = (String)session.getAttribute("add_rental_status");
 
 		String errorMessage = "";
-                if(status != null) {
-                	switch(status) {
-			case "reject_not_num":
-				errorMessage = "midと料金は整数でなければなりません";
-				break;
-			case "reject_not_found":
-				errorMessage = "そのようなユーザあるいはメディアは存在しません";
-				break;
-			default:
-
-			}
-
-                        session.removeAttribute("add_rental_status");
-                }
+		String addStr = "";
+		if(status != null) {
+			switch(status) {
+				case "reject_not_num":
+					errorMessage = "midと料金は整数でなければなりません";
+					break;
+				case "reject_not_found":
+					errorMessage = "そのようなユーザあるいはメディアは存在しません";
+					break;
+				case "reject_not_available":
+					errorMessage = "借りられています";
+					break;
+				case "reject_error":
+					errorMessage = "エラーが発生しました";
+					break;
+				case "accept":
+					addStr = "<table border=\"1\"><th>メールアドレス</th><th>mid</th><th>料金</th><th>貸出日</th><th>返却期限</th>\n"
+                                 + "<tr><td>" + request.getParameter("mail") + "</td><td>" + request.getParameter("mid")
+                                 + "</td><td>" + request.getParameter("fee") + "</td><td>" + request.getParameter("rental_date")
+                                 + "</td><td>" + request.getParameter("return_date") + "</td></tr></table>\n"
+                                 + "を追加しました<br><br>";
+                	break;
+                default:
+            }
+			session.removeAttribute("add_rental_status");
+		}
 
 		Calendar calendar = Calendar.getInstance();
 		int year = calendar.get(Calendar.YEAR);
@@ -74,9 +86,8 @@ public class AddRentalInputServlet extends HttpServlet {
 		out.println("<body>");
 
 		out.println("<h3>レンタル</h3>");
-		
 		out.println("<h4><font color=\"red\">" + errorMessage + "</font></h4>");
-
+		out.println(addStr);
 		out.println("<form action=\"add_rental\" method=\"GET\">");
 		out.println("メールアドレス: ");
 		out.println("<input type=\"text\" name=\"mail\"/>");
@@ -91,15 +102,15 @@ public class AddRentalInputServlet extends HttpServlet {
 		out.println("<br>");
 		out.println("貸出期間: ");
 		out.println("<select name=\"rental_duration\">");
-		out.println("<option value=\"01\" selected>1日</option>");
-		out.println("<option value=\"02\">2日</option>");
-		out.println("<option value=\"03\">3日</option>");
-		out.println("<option value=\"04\">4日</option>");
-		out.println("<option value=\"05\">5日</option>");
-		out.println("<option value=\"06\">6日</option>");
-		out.println("<option value=\"07\">7日</option>");
-		out.println("<option value=\"08\">8日</option>");
-		out.println("<option value=\"09\">9日</option>");
+		out.println("<option value=\"1\" selected>1日</option>");
+		out.println("<option value=\"2\">2日</option>");
+		out.println("<option value=\"3\">3日</option>");
+		out.println("<option value=\"4\">4日</option>");
+		out.println("<option value=\"5\">5日</option>");
+		out.println("<option value=\"6\">6日</option>");
+		out.println("<option value=\"7\">7日</option>");
+		out.println("<option value=\"8\">8日</option>");
+		out.println("<option value=\"9\">9日</option>");
 		out.println("<option value=\"10\">10日</option>");
 		out.println("<option value=\"11\">11日</option>");
 		out.println("<option value=\"12\">12日</option>");

@@ -41,7 +41,9 @@ public class SupervisorServlet extends HttpServlet {
 		
 		HttpSession session = request.getSession(true);
 		
-		session.removeAttribute("order");
+		session.setAttribute("search_shopname", "");
+		session.setAttribute("search_shopaddress", "");
+		session.setAttribute("order", "id");
 
 		out.println("<html>");
 		out.println("<body>");

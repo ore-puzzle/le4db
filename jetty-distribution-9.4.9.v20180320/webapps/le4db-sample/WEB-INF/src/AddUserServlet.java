@@ -47,6 +47,12 @@ public class AddUserServlet extends HttpServlet {
 		String userName = request.getParameter("username");
 		String userAddress = request.getParameter("useraddress");
 		String password = request.getParameter("password");
+		
+		if(mailAddress.equals("") || userName.equals("") || userAddress.equals("") || password.equals("")) {
+			session.setAttribute("add_user_status", "reject_empty");
+			response.sendRedirect("/le4db-sample/add_user_input");
+			return;
+		}
 
 		if(!mailAddress.contains("@")) {
 			session.setAttribute("add_user_status", "reject_not_address");
@@ -54,12 +60,14 @@ public class AddUserServlet extends HttpServlet {
 			return;
 		}
 
+		boolean successful = true;
 		Connection conn = null;
 		Statement stmt = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 			String dbfile = getServletContext().getRealPath("WEB-INF/" + _dbname);
 			conn = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
+			conn.setAutoCommit(false);
 			stmt = conn.createStatement();
 			
 			int existsUser = -1;
@@ -86,11 +94,13 @@ public class AddUserServlet extends HttpServlet {
 			st.setString(3, userAddress);
 			st.setString(4, password);
 			st.executeUpdate();
+			
+			conn.commit();
 
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-
+			successful = false;
 		} finally {
 			try {
 				if (conn != null) {
@@ -101,10 +111,17 @@ public class AddUserServlet extends HttpServlet {
 			}
 		}
 
-		session.setAttribute("add_user_status", "accept");
-		response.sendRedirect("/le4db-sample/add_user_input?mail=" + mailAddress
+		if(successful) {
+			session.setAttribute("add_user_status", "accept");
+			response.sendRedirect("/le4db-sample/add_user_input?mail=" + mailAddress
                                       + "&username=" + URLEncoder.encode(userName, "UTF-8")
                                       + "&useraddress=" + URLEncoder.encode(userAddress, "UTF-8"));
+        } else {
+        	session.setAttribute("add_user_status", "reject_error");
+			response.sendRedirect("/le4db-sample/add_user_input?mail=" + mailAddress
+                                      + "&username=" + URLEncoder.encode(userName, "UTF-8")
+                                      + "&useraddress=" + URLEncoder.encode(userAddress, "UTF-8"));
+        }
 
 	}
 

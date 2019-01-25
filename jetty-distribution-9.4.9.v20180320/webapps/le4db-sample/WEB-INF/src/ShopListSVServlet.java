@@ -42,30 +42,31 @@ public class ShopListSVServlet extends HttpServlet {
 
 		HttpSession session = request.getSession(true);
 		
-		session.removeAttribute("shopname");
-		session.removeAttribute("shopaddress");
+		session.setAttribute("shopname", "");
+		session.setAttribute("shopaddress", "");
 		
 		String deleteShopName = request.getParameter("delete_shopname");
 		String deleteShopAddress = request.getParameter("delete_shopaddress");
 		String searchShopName = request.getParameter("search_shopname");
 		String searchShopAddress = request.getParameter("search_shopaddress");
-
-		String usedNameStr = "";
-		String usedAddressStr = "";
-		String searchNameStr = "";
-		String searchAddressStr = "";
-		String valueNameStr = "";
-		String valueAddressStr = "";
-		if(searchShopName != null && !searchShopName.equals("")) {
-			usedNameStr = "検索した店舗名: " + searchShopName + "<br>";
-			searchNameStr = " and shopname LIKE '%" + searchShopName + "%'";
-			valueNameStr = " value=\"" + searchShopName + "\"";
+		
+		if(searchShopName == null) {
+			searchShopName = (String)session.getAttribute("search_shopname");
+		} else {
+			session.setAttribute("search_shopname", searchShopName);
 		}
-		if(searchShopAddress != null && !searchShopAddress.equals("")) {
-			usedAddressStr = "検索した住所: " + searchShopAddress + "<br>";
-			searchAddressStr = " and shopaddress LIKE '%" + searchShopAddress + "%'";
-			valueAddressStr = " value=\"" + searchShopAddress + "\"";
+		if(searchShopAddress == null) {
+			searchShopAddress = (String)session.getAttribute("search_shopaddress");
+		} else {
+			session.setAttribute("search_shopaddress", searchShopAddress);
 		}
+		
+		String usedNameStr = searchShopName.equals("") ? "" : "検索した店舗名: " + searchShopName + "<br>";
+		String searchNameStr = " and shopname LIKE '%" + searchShopName + "%'";
+		String valueNameStr = " value=\"" + searchShopName + "\"";
+		String usedAddressStr = searchShopAddress.equals("") ? "" : "検索した住所: " + searchShopAddress + "<br>";
+		String searchAddressStr = " and shopaddress LIKE '%" + searchShopAddress + "%'";
+		String valueAddressStr = " value=\"" + searchShopAddress + "\"";
 
 
 		String deleteStr = "";
@@ -82,11 +83,9 @@ public class ShopListSVServlet extends HttpServlet {
 		out.println("<a href=\"add_shop_input\">追加する</a><br><br>");
 		out.println(usedNameStr);
 		out.println(usedAddressStr);
-		
-		if(usedNameStr.length() + usedAddressStr.length() != 0) {
+		if(!usedNameStr.equals("") || !usedAddressStr.equals("")) {
 			out.println("<br>");
 		}
-
 		out.println("<form action=\"shoplist_sv\" method=\"GET\">");
 		out.println("店舗名で検索: ");
 		out.println("<input type=\"text\" name=\"search_shopname\"" + valueNameStr + "/>");
@@ -110,7 +109,7 @@ public class ShopListSVServlet extends HttpServlet {
 			out.println("<tr><th>店舗名</th><th>住所</th><th></th></tr>");
 			
 			ResultSet rs = stmt.executeQuery("SELECT shopname, shopaddress FROM shop WHERE 1 = 1"
-                                                         + searchNameStr + searchAddressStr + " ORDER BY shopname DESC");
+                                                         + searchNameStr + searchAddressStr + " ORDER BY shopname ASC");
 			while (rs.next()) {
 				String shopName = rs.getString("shopname");
 				String shopAddress = rs.getString("shopaddress");

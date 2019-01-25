@@ -56,11 +56,19 @@ public class GetClerkInputServlet extends HttpServlet {
 			case "reject_not_found":
 				errorMessage = "そのような店員は存在しません";
 				break;
+			case "reject_duplicate":
+				errorMessage = "すでにこの店舗で働いています";
+				break;
+			case "reject_error":
+				errorMessage = "エラーが発生しました";
+				break;
 			case "accept":
-				addStr = "<table border=\"1\"><th>eid</th>\n"
-                                 + "<tr><td>" + request.getParameter("eid")
-                                 + "</td></tr></table>\n"
-                                 + "を登録しました<br><br>";
+				addStr = "<table border=\"1\"><tr><th>eid</th><th>名前</th></tr>\n"
+                          + "<tr><td>" + request.getParameter("eid")
+                		  + "</td><td>" + request.getParameter("clerkname")
+                          + "</td></tr></table>\n"
+                          + "を登録しました<br><br>";
+            	break;
 			default:
 
 			}
@@ -96,7 +104,7 @@ public class GetClerkInputServlet extends HttpServlet {
 		out.println("</form>");
 
 
-		out.println("<br/>");
+		out.println("<br>");
 		out.println("<a href=\"clerklist\">前のページに戻る</a>");
 
 		out.println("</body>");

@@ -65,18 +65,22 @@ public class GetClerkServlet extends HttpServlet {
 			return;
 		}
 		
+		boolean successful = true;
+		String clerkName = "";
 		Connection conn = null;
 		Statement stmt = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 			String dbfile = getServletContext().getRealPath("WEB-INF/" + _dbname);
 			conn = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
+			conn.setAutoCommit(false);
 			stmt = conn.createStatement();
+			
 
 			int existsClerk = -1;
-			ResultSet rs = stmt.executeQuery("SELECT count(*) AS num FROM clerk WHERE eid =" + eid);
-			while (rs.next()) {
-				existsClerk = rs.getInt("num");
+			ResultSet rs1 = stmt.executeQuery("SELECT count(*) AS num FROM clerk WHERE eid =" + eid);
+			while (rs1.next()) {
+				existsClerk = rs1.getInt("num");
 			}
 			if(existsClerk == 0) {
 				session.setAttribute("get_clerk_status", "reject_not_found");
@@ -91,6 +95,29 @@ public class GetClerkServlet extends HttpServlet {
 				return;
 			}
 			
+			int already = -1;
+			ResultSet rs2 = stmt.executeQuery("SELECT count(*) AS num FROM work1 WHERE eid =" + eid + " and shopname = '"
+			                                   + shopName + "' and shopaddress = '" + shopAddress + "'");
+			while (rs2.next()) {
+				already = rs2.getInt("num");
+			}
+			if(already > 0) {
+				session.setAttribute("get_clerk_status", "reject_duplicate");
+				response.sendRedirect("/le4db-sample/get_clerk_input");
+				try {
+					if (conn != null) {
+						conn.close();
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				return;
+			}
+			
+			ResultSet rs3 = stmt.executeQuery("SELECT clerkname FROM clerk WHERE eid =" + eid);
+			while (rs3.next()) {
+				clerkName = rs3.getString("clerkname");
+			}
 			
 			for(int i = 0; i < commuteMethod.length; i++) {
 				PreparedStatement st1 = conn.prepareStatement("INSERT INTO work1 VALUES(?, ?, ?, ?)");
@@ -109,14 +136,25 @@ public class GetClerkServlet extends HttpServlet {
 			st2.executeUpdate();
 			
 			for(int i = 0; i < commuteMethod.length; i++) {
-				PreparedStatement st3 = conn.prepareStatement("INSERT INTO attached_info VALUES(?, ?)");
-				st3.setString(1, commuteMethod[i]);
-				st3.setString(2, goodPoint);
-				st3.executeUpdate();
+				int existsInfo = -1;
+				ResultSet rs4 = stmt.executeQuery("SELECT count(*) AS num FROM attached_info WHERE commute_method = '" + commuteMethod[i]
+					                               + "' and good_point_of_shop = '" + goodPoint + "'");
+				while(rs4.next()) {
+					existsInfo = rs4.getInt("num");
+				}
+				if(existsInfo == 0) {
+					PreparedStatement st3 = conn.prepareStatement("INSERT INTO attached_info VALUES(?, ?)");
+					st3.setString(1, commuteMethod[i]);
+					st3.setString(2, goodPoint);
+					st3.executeUpdate();
+				}
 			}
+			
+			conn.commit();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			successful = false;
 		} finally {
 			try {
 				if (conn != null) {
@@ -127,8 +165,13 @@ public class GetClerkServlet extends HttpServlet {
 			}
 		}
 
-		session.setAttribute("get_clerk_status", "accept");
-		response.sendRedirect("/le4db-sample/get_clerk_input?eid=" + eid);
+		if(successful) {
+			session.setAttribute("get_clerk_status", "accept");
+			response.sendRedirect("/le4db-sample/get_clerk_input?eid=" + eid + "&clerkname=" + URLEncoder.encode(clerkName, "UTF-8"));
+		} else {
+			session.setAttribute("get_clerk_status", "reject_error");
+			response.sendRedirect("/le4db-sample/get_clerk_input?eid=" + eid + "&clerkname=" + URLEncoder.encode(clerkName, "UTF-8"));
+		}
 
 	}
 
