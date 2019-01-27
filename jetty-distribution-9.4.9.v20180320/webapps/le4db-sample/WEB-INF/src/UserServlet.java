@@ -88,7 +88,7 @@ public class UserServlet extends HttpServlet {
 			out.println("<input type=\"text\" name=\"search_title\"/>");
 			out.println("<br>");
 			out.println("ジャンルで検索: ");
-			out.println("<input type=\"radio\" name=\"search_genre\" value=\"all\" selected>全て</input>");
+			out.println("<input type=\"radio\" name=\"search_genre\" value=\"all\" checked>全て</input>");
 			out.println("<input type=\"radio\" name=\"search_genre\" value=\"movie\">映画</input>");
 			out.println("<input type=\"radio\" name=\"search_genre\" value=\"drama\">ドラマ</input>");
 			out.println("<input type=\"radio\" name=\"search_genre\" value=\"anime\">アニメ</input>");

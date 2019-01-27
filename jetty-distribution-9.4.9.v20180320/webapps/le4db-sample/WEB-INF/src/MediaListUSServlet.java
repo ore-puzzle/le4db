@@ -57,7 +57,7 @@ public class MediaListUSServlet extends HttpServlet {
 		}
 
 		String searchTitleStr = " and title LIKE '%" + searchTitle + "%'";
-		String searchGenreStr = " and genre LIKE '%" + searchGenre + "%'";
+		String searchGenreStr = " and genre LIKE '%" + (searchGenre.equals("all") ? "" : searchGenre) + "%'";
 
 		String shopName = request.getParameter("shopname");
 		String shopAddress = request.getParameter("shopaddress");
