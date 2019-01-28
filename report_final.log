@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.14159265-p3.7.2-170924-2.6 (sjis) (TeX Live 2017/W32TeX) (preloaded format=platex 2017.12.7)  26 JAN 2019 18:01
+This is e-pTeX, Version 3.14159265-p3.7.2-170924-2.6 (sjis) (TeX Live 2017/W32TeX) (preloaded format=platex 2017.12.7)  28 JAN 2019 12:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -185,14 +185,161 @@ Overfull \hbox (28.74715pt too wide) in paragraph at lines 128--128
  yes[] 
  []
 
-[5] [6] [7] (./report_final.aux) ) 
-Here is how much of TeX's memory you used:
- 1948 strings out of 493629
- 26890 string characters out of 6150213
- 94439 words of memory out of 5000000
- 5567 multiletter control sequences out of 15000+600000
- 13564 words of font info for 53 fonts, out of 8000000 for 9000
- 929 hyphenation exceptions out of 8191
- 26i,7n,32p,289b,385s stack positions out of 5000i,500n,10000p,500000b,80000s
+[5]
+LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <12> not available
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 182.
+LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <12> not available
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 182.
+File: login.png Graphic file (type bmp)
+<login.png>
 
-Output written on report_final.dvi (7 pages, 11000 bytes).
+Overfull \hbox (0.72437pt too wide) in paragraph at lines 185--186
+ [] 
+ []
+
+[6]
+File: search.png Graphic file (type bmp)
+<search.png>
+
+Overfull \hbox (42.37999pt too wide) in paragraph at lines 195--196
+ [] 
+ []
+
+File: result_shop.png Graphic file (type bmp)
+<result_shop.png>
+
+Overfull \hbox (0.72437pt too wide) in paragraph at lines 202--203
+ [] 
+ []
+
+[7] [8] [9]
+File: result_media.png Graphic file (type bmp)
+<result_media.png>
+
+Overfull \hbox (0.72437pt too wide) in paragraph at lines 212--213
+ [] 
+ []
+
+File: history.png Graphic file (type bmp)
+<history.png>
+
+Overfull \hbox (98.08812pt too wide) in paragraph at lines 222--223
+ [] 
+ []
+
+File: add_user.png Graphic file (type bmp)
+<add_user.png>
+
+Overfull \hbox (42.37999pt too wide) in paragraph at lines 232--233
+ [] 
+ []
+
+[10] [11]
+File: rental.png Graphic file (type bmp)
+<rental.png>
+
+Overfull \hbox (56.93437pt too wide) in paragraph at lines 242--243
+ [] 
+ []
+
+File: return.png Graphic file (type bmp)
+<return.png>
+
+Overfull \hbox (56.93437pt too wide) in paragraph at lines 249--250
+ [] 
+ []
+
+[12] [13] [14]
+File: add_clerk.png Graphic file (type bmp)
+<add_clerk.png>
+
+Overfull \hbox (56.93437pt too wide) in paragraph at lines 259--260
+ [] 
+ []
+
+File: add_media.png Graphic file (type bmp)
+<add_media.png>
+
+Overfull \hbox (56.93437pt too wide) in paragraph at lines 269--270
+ [] 
+ []
+
+File: add_shop.png Graphic file (type bmp)
+<add_shop.png>
+
+Overfull \hbox (56.93437pt too wide) in paragraph at lines 279--280
+ [] 
+ []
+
+[15] [16]
+File: delete_shop.png Graphic file (type bmp)
+<delete_shop.png>
+
+Overfull \hbox (56.93437pt too wide) in paragraph at lines 286--287
+ [] 
+ []
+
+File: get_clerk.png Graphic file (type bmp)
+<get_clerk.png>
+
+Overfull \hbox (56.93437pt too wide) in paragraph at lines 296--297
+ [] 
+ []
+
+File: remove_clerk.png Graphic file (type bmp)
+<remove_clerk.png>
+
+Overfull \hbox (56.93437pt too wide) in paragraph at lines 303--304
+ [] 
+ []
+
+File: get_media.png Graphic file (type bmp)
+<get_media.png>
+
+Overfull \hbox (56.93437pt too wide) in paragraph at lines 313--314
+ [] 
+ []
+
+[17] [18] [19] [20]
+File: remove_media.png Graphic file (type bmp)
+<remove_media.png>
+
+Overfull \hbox (56.93437pt too wide) in paragraph at lines 320--321
+ [] 
+ []
+
+[21] [22]
+Overfull \hbox (113.99615pt too wide) in paragraph at lines 341--341
+[]    \OT1/cmtt/m/n/10 DELETE FROM put WHERE shopname = old.shopname and shopad
+dress = old.shopaddress;[] 
+ []
+
+
+Overfull \hbox (124.49606pt too wide) in paragraph at lines 341--341
+[]    \OT1/cmtt/m/n/10 DELETE FROM work1 WHERE shopname = old.shopname and shop
+address = old.shopaddress;[] 
+ []
+
+
+Overfull \hbox (124.49606pt too wide) in paragraph at lines 341--341
+[]    \OT1/cmtt/m/n/10 DELETE FROM work2 WHERE shopname = old.shopname and shop
+address = old.shopaddress;[] 
+ []
+
+
+Overfull \hbox (140.24593pt too wide) in paragraph at lines 341--341
+[]    \OT1/cmtt/m/n/10 DELETE FROM clerk WHERE (SELECT count(*) FROM work1 WHER
+E clerk.eid = work1.eid) = 0;[] 
+ []
+
+[23] (./report_final.aux) ) 
+Here is how much of TeX's memory you used:
+ 2032 strings out of 493629
+ 28579 string characters out of 6150213
+ 95588 words of memory out of 5000000
+ 5619 multiletter control sequences out of 15000+600000
+ 13871 words of font info for 54 fonts, out of 8000000 for 9000
+ 929 hyphenation exceptions out of 8191
+ 26i,7n,32p,1168b,326s stack positions out of 5000i,500n,10000p,500000b,80000s
+
+Output written on report_final.dvi (23 pages, 27356 bytes).

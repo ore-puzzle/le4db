@@ -95,7 +95,7 @@ public class ShopListUSServlet extends HttpServlet {
 		out.println("<form action=\"shoplist_us\" method=\"GET\">");
 		out.println("ソート: ");
 		out.println("<select name=\"order\">");
-		out.println("<option value=\"alphabet\" " + selectAlphabet + ">五十音順</option>");
+		out.println("<option value=\"alphabet\" " + selectAlphabet + ">店舗名順</option>");
 		out.println("<option value=\"total_num\" " + selectNum + ">総所持数順</option>");
 		out.println("</select>");
 		out.println("<input type=\"submit\" value=\"適用\"/>");

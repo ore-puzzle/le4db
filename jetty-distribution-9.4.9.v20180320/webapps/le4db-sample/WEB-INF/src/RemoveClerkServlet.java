@@ -70,30 +70,6 @@ public class RemoveClerkServlet extends HttpServlet {
 			st2.setInt(3, eid);
 			st2.executeUpdate();
 			
-			int working = -1;
-			ResultSet rs1 = stmt.executeQuery("SELECT count(*) AS num FROM work1 WHERE eid =" + eid);
-			while(rs1.next()) {
-				working = rs1.getInt("num");
-			}
-			if(working == 0) {
-				PreparedStatement st3 = conn.prepareStatement("DELETE FROM clerk WHERE eid = ?");
-				st3.setInt(1, eid);
-				st3.executeUpdate();
-			}
-			
-			int hasClerk = -1;
-			ResultSet rs2 = stmt.executeQuery("SELECT count(*) AS num FROM work1 WHERE shopname ='" + shopName
-			                                  + "' and shopaddress = '" + shopAddress + "'");
-			while(rs2.next()) {
-				hasClerk = rs2.getInt("num");
-			}
-			if(hasClerk == 0) {
-				PreparedStatement st3 = conn.prepareStatement("DELETE FROM shop WHERE shopname = ? and shopaddress = ?");
-				st3.setString(1, shopName);
-				st3.setString(2, shopAddress);
-				st3.executeUpdate();
-			}
-			
 			conn.commit();
 
 		} catch (Exception e) {

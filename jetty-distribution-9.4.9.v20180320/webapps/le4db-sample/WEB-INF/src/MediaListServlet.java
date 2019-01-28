@@ -132,7 +132,7 @@ public class MediaListServlet extends HttpServlet {
 		out.println("ソート: ");
 		out.println("<select name =\"order\">");
 		out.println("<option value=\"id\" " + selectMid + ">mid順</option>");
-		out.println("<option value=\"alphabet\" " + selectAlphabet + ">五十音順</option>");
+		out.println("<option value=\"alphabet\" " + selectAlphabet + ">タイトル順</option>");
 		out.println("</select>");
 		out.println("<input type=\"submit\" value=\"適用\"/>");
 		out.println("</form>");

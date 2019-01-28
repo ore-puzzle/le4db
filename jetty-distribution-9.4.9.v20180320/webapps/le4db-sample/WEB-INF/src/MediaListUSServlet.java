@@ -112,7 +112,7 @@ public class MediaListUSServlet extends HttpServlet {
 		out.println("<html>");
 		out.println("<body>");
 		out.println("<h3>" + shopName + "</h3>");
-		out.println("<h3>" + (shopName.equals("") ? "メディア検索結果" : "メディア一覧") + "</h3>");
+		out.println("<h3>" + (shopName.equals("") ? "作品検索結果" : "作品一覧") + "</h3>");
 		if(shopName.equals("")) {
 			out.println("検索したタイトル: " + searchTitle);
 			out.println("<br>");
@@ -122,7 +122,7 @@ public class MediaListUSServlet extends HttpServlet {
 		out.println("<form action=\"medialist_us\" method=\"GET\">");
 		out.println("ソート: ");
 		out.println("<select name =\"order\">");
-		out.println("<option value=\"alphabet\" " + selectAlphabet + ">五十音順</option>");
+		out.println("<option value=\"alphabet\" " + selectAlphabet + ">タイトル順</option>");
 		out.println("<option value=\"length\" " + selectLength + ">長さ順</option>");
 		out.println("<option value=\"published_year\" " + selectYear + ">出版年順</option>");
 		out.println("</select>");
